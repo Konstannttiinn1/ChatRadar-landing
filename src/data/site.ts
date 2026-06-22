@@ -8,6 +8,7 @@ export const site = {
   nav: [
     { label: 'Как это работает', href: '#how-it-works' },
     { label: 'Возможности', href: '#features' },
+    { label: 'Оценка чатов', href: '#chat-quality' },
     { label: 'Тарифы', href: '#pricing' },
     { label: 'FAQ', href: '#faq' }
   ],
