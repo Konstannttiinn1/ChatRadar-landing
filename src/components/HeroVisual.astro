@@ -1,0 +1,66 @@
+---
+const { site, example } = Astro.props;
+
+const bubbles = Array.from({ length: 92 }, (_, index) => {
+  const angle = (index / 92) * Math.PI * 2;
+  const ring = index % 3;
+  const rx = 48 - ring * 5 + Math.sin(index * 1.7) * 2.5;
+  const ry = 27 - ring * 3 + Math.cos(index * 1.2) * 2;
+  const x = 50 + Math.cos(angle) * rx;
+  const y = 50 + Math.sin(angle) * ry;
+  const width = [32, 38, 44, 28, 52][index % 5];
+  const height = [16, 18, 20, 15][index % 4];
+  const tone = index % 11 === 0 ? 'coral' : index % 7 === 0 ? 'mint' : 'slate';
+
+  return {
+    x: x.toFixed(2),
+    y: y.toFixed(2),
+    width,
+    height,
+    tone,
+    rotation: (Math.sin(index) * 5).toFixed(2),
+    opacity: (0.56 + (index % 5) * 0.08).toFixed(2),
+  };
+});
+---
+<div class="hero-visual" aria-label="Как ChatRadar находит важные сообщения">
+  <div class="message-eye" aria-hidden="true">
+    <div class="radar-grid"></div>
+    <div class="radar-sweep"></div>
+    {bubbles.map((bubble) => (
+      <span
+        class={`eye-bubble eye-bubble-${bubble.tone}`}
+        style={`--x:${bubble.x}; --y:${bubble.y}; --w:${bubble.width}px; --h:${bubble.height}px; --r:${bubble.rotation}deg; --o:${bubble.opacity};`}
+      ></span>
+    ))}
+    <div class="eye-core">
+      <span></span>
+    </div>
+  </div>
+
+  <div class="pipeline pipeline-v2">
+    <article class="pipeline-card chat-card">
+      <div class="pipeline-label"><span>1</span>Сообщение в чате</div>
+      <small>{example.source}</small>
+      <p>{example.message}</p>
+    </article>
+
+    <span class="arrow">→</span>
+
+    <article class="pipeline-card llm-card">
+      <div class="pipeline-label"><span>2</span>Анализ и классификация</div>
+      <small>LLM проверяет по вашей логике</small>
+      <strong>{example.category}</strong>
+      <em>Уверенность: {example.confidence}</em>
+    </article>
+
+    <span class="arrow">→</span>
+
+    <article class="pipeline-card notification">
+      <div class="pipeline-label"><span>3</span>Уведомление в Telegram</div>
+      <small>ChatRadar bot</small>
+      <p>Новый релевантный запрос найден.</p>
+      <a href={site.botUrl} target="_blank" rel="noreferrer">Открыть сообщение</a>
+    </article>
+  </div>
+</div>
