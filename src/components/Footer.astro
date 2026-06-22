@@ -1,0 +1,15 @@
+---
+const { site } = Astro.props;
+---
+<footer class="footer">
+  <div class="container footer-inner">
+    <a class="brand footer-brand" href="#top">
+      <span class="brand-mark"><span></span></span>
+      <span>{site.name}</span>
+    </a>
+    <div class="footer-links">
+      {site.docs.map((doc) => <a href={doc.href}>{doc.label}</a>)}
+    </div>
+    <a class="telegram-link" href={site.supportUrl} target="_blank" rel="noreferrer">Связаться в Telegram</a>
+  </div>
+</footer>
