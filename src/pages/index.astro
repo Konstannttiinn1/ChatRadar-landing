@@ -1,10 +1,12 @@
 ---
 import '../styles/global.css';
+import '../styles/chatQuality.css';
 import Header from '../components/Header.astro';
 import Hero from '../components/Hero.astro';
 import HowItWorks from '../components/HowItWorks.astro';
 import UseCases from '../components/UseCases.astro';
 import Features from '../components/Features.astro';
+import ChatQuality from '../components/ChatQuality.astro';
 import VideoBlock from '../components/VideoBlock.astro';
 import Pricing from '../components/Pricing.astro';
 import FAQ from '../components/FAQ.astro';
@@ -22,15 +24,16 @@ import { faq } from '../data/faq';
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={site.description} />
-    <title>ChatRadar — фильтр важных сообщений в Telegram</title>
+    <title>ChatRadar — мониторинг Telegram-чатов в реальном времени</title>
   </head>
   <body>
     <Header site={site} />
     <main>
       <Hero site={site} example={examples[0]} />
       <HowItWorks />
-      <UseCases useCases={useCases} />
       <Features features={features} />
+      <ChatQuality site={site} />
+      <UseCases useCases={useCases} />
       <VideoBlock site={site} />
       <Pricing pricing={pricing} site={site} />
       <FAQ faq={faq} />
