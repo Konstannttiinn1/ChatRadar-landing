@@ -6,15 +6,30 @@ const { features } = Astro.props;
     <div class="section-head">
       <p class="section-kicker">Возможности</p>
       <h2>Не просто ключевые слова, а фильтрация по смыслу</h2>
+      <p class="muted">Сначала бот находит потенциальные совпадения, затем LLM проверяет сообщение по вашей логике и оставляет только полезное.</p>
     </div>
-    <div class="feature-grid">
-      {features.map((feature) => (
-        <article class="feature-card">
-          <span class="feature-icon">✦</span>
-          <h3>{feature.title}</h3>
-          <p>{feature.text}</p>
-        </article>
-      ))}
+
+    <div class="features-layout">
+      <div class="feature-grid">
+        {features.map((feature) => (
+          <article class="feature-card">
+            <span class="feature-icon">{feature.icon}</span>
+            <h3>{feature.title}</h3>
+            <p>{feature.text}</p>
+          </article>
+        ))}
+      </div>
+
+      <aside class="feature-radar-card" aria-label="Радар релевантных сообщений">
+        <div class="tiny-radar">
+          <span class="tiny-radar-core"></span>
+          <span class="tiny-radar-dot dot-one"></span>
+          <span class="tiny-radar-dot dot-two"></span>
+          <span class="tiny-radar-dot dot-three"></span>
+        </div>
+        <h3>Радар релевантности</h3>
+        <p>Каждое сообщение проходит путь: ключевое слово → смысл → категория → уведомление.</p>
+      </aside>
     </div>
   </div>
 </section>
