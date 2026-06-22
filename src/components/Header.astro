@@ -1,0 +1,16 @@
+---
+const { site } = Astro.props;
+---
+<header class="header">
+  <a class="brand" href="#top" aria-label="ChatRadar home">
+    <span class="brand-mark"><span></span></span>
+    <span>{site.name}</span>
+  </a>
+  <nav class="nav" aria-label="Основная навигация">
+    {site.nav.map((item) => <a href={item.href}>{item.label}</a>)}
+  </nav>
+  <div class="header-actions">
+    <a class="login-link" href={site.supportUrl} target="_blank" rel="noreferrer">Связаться</a>
+    <a class="button button-coral" href={site.botUrl} target="_blank" rel="noreferrer">Попробовать бесплатно</a>
+  </div>
+</header>
