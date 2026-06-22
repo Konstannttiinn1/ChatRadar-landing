@@ -1,0 +1,20 @@
+---
+const { useCases } = Astro.props;
+---
+<section class="section section-light" id="use-cases">
+  <div class="container split-section">
+    <div>
+      <p class="section-kicker">Где применимо</p>
+      <h2>Для задач, где важно реагировать первым</h2>
+      <p class="muted">ChatRadar подходит для команд, которые ищут запросы, обращения и возможности в потоке Telegram-чатов.</p>
+    </div>
+    <div class="usecase-list">
+      {useCases.map((item) => (
+        <article>
+          <h3>{item.title}</h3>
+          <p>{item.text}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
