@@ -4,39 +4,39 @@ const { site } = Astro.props;
 const rows = [
   {
     name: 'Авто СПб',
-    matches: 84,
-    relevant: 23,
-    ratio: '27%',
+    matches: 96,
+    relevant: 28,
+    ratio: '29%',
     status: 'сильный источник',
     tone: 'hot'
   },
   {
     name: 'Toyota Club',
-    matches: 51,
-    relevant: 14,
-    ratio: '27%',
-    status: 'можно тестировать рекламу',
+    matches: 58,
+    relevant: 16,
+    ratio: '28%',
+    status: 'стабильный источник',
     tone: 'good'
   },
   {
-    name: 'Барахолка района',
-    matches: 300,
-    relevant: 4,
-    ratio: '1%',
-    status: 'много шума',
-    tone: 'noise'
+    name: 'Чат района',
+    matches: 71,
+    relevant: 15,
+    ratio: '21%',
+    status: 'хороший локальный чат',
+    tone: 'good'
   },
   {
-    name: 'Городской чат',
-    matches: 42,
-    relevant: 1,
-    ratio: '2%',
-    status: 'слабый источник',
-    tone: 'weak'
+    name: 'Игровое сообщество',
+    matches: 64,
+    relevant: 13,
+    ratio: '20%',
+    status: 'можно тестировать рекламу',
+    tone: 'good'
   }
 ];
 
-const days = [38, 56, 82, 44, 74, 61, 91];
+const days = [46, 62, 74, 58, 83, 69, 88];
 ---
 <section class="section section-quality" id="chat-quality">
   <div class="container quality-layout">
@@ -45,14 +45,14 @@ const days = [38, 56, 82, 44, 74, 61, 91];
       <h2>Понимайте, какие чаты дают заявки</h2>
       <p class="muted quality-lead">
         ChatRadar считает, сколько целевых сообщений приходит из каждого подключённого чата,
-        и показывает, где есть реальные запросы, а где в основном шум.
+        и помогает понять, какие источники стоит держать в работе, а где можно тестировать рекламу.
       </p>
 
       <div class="quality-points">
         <article>
           <span>01</span>
           <h3>Релевантные запросы по чату</h3>
-          <p>Видно, какие источники чаще дают сообщения, на которые стоит реагировать.</p>
+          <p>Видно, какие источники чаще дают сообщения, на которые стоит быстро реагировать.</p>
         </article>
         <article>
           <span>02</span>
@@ -62,7 +62,7 @@ const days = [38, 56, 82, 44, 74, 61, 91];
         <article>
           <span>03</span>
           <h3>Решения по рекламе</h3>
-          <p>Понимайте, где тестировать размещение, какие чаты держать в работе, а какие отключать.</p>
+          <p>Понимайте, какие чаты стоит развивать, где тестировать размещение и какие источники слабее.</p>
         </article>
       </div>
 
@@ -76,7 +76,7 @@ const days = [38, 56, 82, 44, 74, 61, 91];
       <div class="dashboard-topline">
         <div>
           <span>Проект</span>
-          <strong>Автозапчасти</strong>
+          <strong>Поиск заявок</strong>
         </div>
         <small>Последние 7 дней</small>
       </div>
@@ -84,15 +84,15 @@ const days = [38, 56, 82, 44, 74, 61, 91];
       <div class="dashboard-stats">
         <article>
           <span>Совпадений</span>
-          <strong>477</strong>
+          <strong>289</strong>
         </article>
         <article>
           <span>Целевых</span>
-          <strong>42</strong>
+          <strong>72</strong>
         </article>
         <article>
           <span>Шум отсеян</span>
-          <strong>91%</strong>
+          <strong>75%</strong>
         </article>
       </div>
 
