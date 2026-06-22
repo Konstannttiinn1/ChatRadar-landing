@@ -1,4 +1,6 @@
 ---
+import HeroVisual from './HeroVisual.astro';
+
 const { site, example } = Astro.props;
 ---
 <section class="hero" id="top">
@@ -7,46 +9,22 @@ const { site, example } = Astro.props;
       <p class="eyebrow">Фильтр чатов в Telegram</p>
       <h1>Видит только <span>важное.</span><br />Остальное — шум.</h1>
       <p class="hero-text">
-        ChatRadar — Telegram-бот с логикой на базе LLM, который фильтрует сообщения по вашим правилам
-        и присылает только релевантные уведомления.
+        ChatRadar следит за выбранными Telegram-чатами, находит потенциально важные сообщения
+        и проверяет их по вашей логике. В уведомления попадает только то, что действительно важно.
       </p>
       <div class="hero-buttons">
         <a class="button button-coral" href={site.botUrl} target="_blank" rel="noreferrer">Попробовать бесплатно</a>
-        <a class="button button-ghost" href="#how-it-works">Как это работает</a>
+        <a class="button button-ghost" href={site.supportUrl} target="_blank" rel="noreferrer">Связаться</a>
+        <a class="button button-ghost subtle" href="#how-it-works">Как это работает</a>
       </div>
       <div class="hero-benefits">
-        <span>LLM на ваших правилах</span>
-        <span>Меньше шума</span>
-        <span>Работает 24/7</span>
+        <span><b>LLM</b> на ваших правилах</span>
+        <span><b>Меньше</b> шума</span>
+        <span><b>Работает</b> 24/7</span>
+        <span><b>Контроль:</b> только выбранные источники</span>
       </div>
     </div>
 
-    <div class="hero-visual" aria-label="Иллюстрация радара сообщений">
-      <div class="eye-radar">
-        {Array.from({ length: 46 }).map((_, i) => <span class={`bubble bubble-${i % 5}`}></span>)}
-        <div class="radar-core"></div>
-      </div>
-      <div class="pipeline">
-        <article class="pipeline-card">
-          <b>1 · Сообщение в чате</b>
-          <small>{example.source}</small>
-          <p>{example.message}</p>
-        </article>
-        <span class="arrow">→</span>
-        <article class="pipeline-card">
-          <b>2 · Анализ LLM</b>
-          <small>Релевантно вашей теме</small>
-          <strong>{example.category}</strong>
-          <em>Уверенность: {example.confidence}</em>
-        </article>
-        <span class="arrow">→</span>
-        <article class="pipeline-card notification">
-          <b>3 · Уведомление</b>
-          <small>ChatRadar bot</small>
-          <p>Новый релевантный запрос найден.</p>
-          <a href={site.botUrl} target="_blank" rel="noreferrer">Открыть сообщение</a>
-        </article>
-      </div>
-    </div>
+    <HeroVisual site={site} example={example} />
   </div>
 </section>
