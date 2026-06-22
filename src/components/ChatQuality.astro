@@ -1,0 +1,132 @@
+---
+const { site } = Astro.props;
+
+const rows = [
+  {
+    name: 'Авто СПб',
+    matches: 84,
+    relevant: 23,
+    ratio: '27%',
+    status: 'сильный источник',
+    tone: 'hot'
+  },
+  {
+    name: 'Toyota Club',
+    matches: 51,
+    relevant: 14,
+    ratio: '27%',
+    status: 'можно тестировать рекламу',
+    tone: 'good'
+  },
+  {
+    name: 'Барахолка района',
+    matches: 300,
+    relevant: 4,
+    ratio: '1%',
+    status: 'много шума',
+    tone: 'noise'
+  },
+  {
+    name: 'Городской чат',
+    matches: 42,
+    relevant: 1,
+    ratio: '2%',
+    status: 'слабый источник',
+    tone: 'weak'
+  }
+];
+
+const days = [38, 56, 82, 44, 74, 61, 91];
+---
+<section class="section section-quality" id="chat-quality">
+  <div class="container quality-layout">
+    <div class="quality-copy">
+      <p class="section-kicker">Оценка качества Telegram-чатов</p>
+      <h2>Понимайте, какие чаты дают заявки</h2>
+      <p class="muted quality-lead">
+        ChatRadar считает, сколько целевых сообщений приходит из каждого подключённого чата,
+        и показывает, где есть реальные запросы, а где в основном шум.
+      </p>
+
+      <div class="quality-points">
+        <article>
+          <span>01</span>
+          <h3>Релевантные запросы по чату</h3>
+          <p>Видно, какие источники чаще дают сообщения, на которые стоит реагировать.</p>
+        </article>
+        <article>
+          <span>02</span>
+          <h3>Польза против шума</h3>
+          <p>Сравнивайте совпадения по словам и реальные целевые срабатывания после фильтрации.</p>
+        </article>
+        <article>
+          <span>03</span>
+          <h3>Решения по рекламе</h3>
+          <p>Понимайте, где тестировать размещение, какие чаты держать в работе, а какие отключать.</p>
+        </article>
+      </div>
+
+      <div class="inline-actions">
+        <a class="button button-dark" href={site.botUrl} target="_blank" rel="noreferrer">Попробовать на своих чатах</a>
+        <a class="button button-muted" href={site.supportUrl} target="_blank" rel="noreferrer">Обсудить настройку</a>
+      </div>
+    </div>
+
+    <div class="quality-dashboard" aria-label="Пример оценки качества Telegram-чатов">
+      <div class="dashboard-topline">
+        <div>
+          <span>Проект</span>
+          <strong>Автозапчасти</strong>
+        </div>
+        <small>Последние 7 дней</small>
+      </div>
+
+      <div class="dashboard-stats">
+        <article>
+          <span>Совпадений</span>
+          <strong>477</strong>
+        </article>
+        <article>
+          <span>Целевых</span>
+          <strong>42</strong>
+        </article>
+        <article>
+          <span>Шум отсеян</span>
+          <strong>91%</strong>
+        </article>
+      </div>
+
+      <div class="chat-table">
+        <div class="chat-table-head">
+          <span>Чат</span>
+          <span>Совп.</span>
+          <span>Целев.</span>
+          <span>Оценка</span>
+        </div>
+        {rows.map((row) => (
+          <article class={`chat-row is-${row.tone}`}>
+            <div>
+              <strong>{row.name}</strong>
+              <small>{row.ratio} полезных срабатываний</small>
+            </div>
+            <span>{row.matches}</span>
+            <span>{row.relevant}</span>
+            <em>{row.status}</em>
+          </article>
+        ))}
+      </div>
+
+      <div class="quality-chart">
+        <div>
+          <strong>Динамика целевых запросов</strong>
+          <span>по дням внутри проекта</span>
+        </div>
+        <div class="quality-bars" aria-hidden="true">
+          {days.map((height, index) => (
+            <i style={`--h:${height}%`}><span>{['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'][index]}</span></i>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
