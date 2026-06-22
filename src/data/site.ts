@@ -1,7 +1,7 @@
 export const site = {
   name: 'ChatRadar',
   description:
-    'Telegram-бот с LLM-фильтрацией, который помогает находить клиентов и важные сообщения в выбранных чатах.',
+    'Telegram-бот, который отслеживает выбранные чаты в реальном времени и присылает уведомления о целевых запросах клиентов.',
   botUrl: 'https://t.me/AItestKL_bot',
   supportUrl: 'https://t.me/L_Konstantinn',
   email: '',
