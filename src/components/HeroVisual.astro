@@ -13,7 +13,6 @@
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    min-height: 585px;
   }
 
   .hero-animation-card {
@@ -27,6 +26,7 @@
     box-shadow: 0 30px 100px rgba(0, 0, 0, .42);
     border: 1px solid rgba(255, 255, 255, .08);
     isolation: isolate;
+    transform: translateX(72px);
   }
 
   .hero-animation-card canvas {
@@ -38,36 +38,22 @@
   @media (max-width: 1180px) {
     .hero-visual-animated {
       justify-content: center;
-      min-height: auto;
-      margin-top: 12px;
     }
 
     .hero-animation-card {
       width: min(760px, 100%);
-      height: 520px;
+      height: min(74vw, 560px);
+      min-height: 390px;
       margin: 0 auto;
+      transform: none;
     }
   }
 
-  @media (max-width: 760px) {
-    .hero-visual-animated {
-      margin-top: 18px;
-    }
-
+  @media (max-width: 640px) {
     .hero-animation-card {
-      width: 100%;
-      height: auto;
-      min-height: 0;
-      aspect-ratio: 1.16 / 1;
-      max-height: 340px;
+      height: 330px;
+      min-height: 330px;
       border-radius: 26px;
-    }
-  }
-
-  @media (max-width: 400px) {
-    .hero-animation-card {
-      aspect-ratio: 1.08 / 1;
-      max-height: 318px;
     }
   }
 </style>
@@ -132,14 +118,6 @@
       white-space: normal;
       text-align: center;
     }
-
-    .hero-benefits {
-      gap: 12px;
-    }
-
-    .hero-benefits span {
-      padding: 14px 16px;
-    }
   }
 </style>
 
@@ -169,36 +147,7 @@
     let frame = 0;
     let rafId = 0;
     let isMobile = false;
-
-    const mobileConfig = {
-      messageCount: 18,
-      starMin: 32,
-      starDensity: 9000,
-      trackWidth: 0.32,
-      trackHeight: 0.19,
-      radarScale: 0.17,
-      messageScale: 0.62,
-      showLegend: false,
-      speedMin: 0.0005,
-      speedRange: 0.00028,
-    };
-
-    const desktopConfig = {
-      messageCount: 50,
-      starMin: 80,
-      starDensity: 4200,
-      trackWidth: 0.44,
-      trackHeight: 0.30,
-      radarScale: 0.24,
-      messageScale: 1,
-      showLegend: true,
-      speedMin: 0.0007,
-      speedRange: 0.0004,
-    };
-
-    function cfg() {
-      return isMobile ? mobileConfig : desktopConfig;
-    }
+    let msgs = [];
 
     const T = {
       bgInner:'#0f1f1a', bgOuter:'#081311',
@@ -210,14 +159,14 @@
 
     const TYPES = ['lead','lead','lead','lead','lead','skip','skip','skip','neutral','neutral'];
     const stars = [];
-    const msgs = [];
 
     function eyeH(tx){ return Math.sin(tx * Math.PI) * EHH; }
 
     function makeStars() {
-      const current = cfg();
       stars.length = 0;
-      const amount = Math.max(current.starMin, Math.round((W * H) / current.starDensity));
+      const density = isMobile ? 7600 : 4200;
+      const minStars = isMobile ? 42 : 80;
+      const amount = Math.max(minStars, Math.round((W * H) / density));
       for (let i = 0; i < amount; i++) {
         stars.push({
           x: Math.random() * W,
@@ -233,13 +182,12 @@
     class Msg {
       constructor(){ this.reset(); this.tx = Math.random(); }
       reset(st = 0){
-        const current = cfg();
-        this.tx = -0.05;
+        this.tx = isMobile ? -0.18 - Math.random() * 0.22 : -0.05;
         this.lane = Math.random() * 2 - 1;
-        this.speed = current.speedMin + Math.random() * current.speedRange;
+        this.speed = (isMobile ? 0.0012 : 0.0007) + Math.random() * (isMobile ? 0.00055 : 0.0004);
         this.type = TYPES[Math.floor(Math.random() * TYPES.length)];
         this.bob = Math.random() * Math.PI * 2;
-        this.bobAmp = 4 + Math.random() * 5;
+        this.bobAmp = (isMobile ? 3 : 4) + Math.random() * (isMobile ? 4 : 5);
         this.size = 0.85 + Math.random() * 0.3;
         this.stagger = st;
         this.detected = false;
@@ -252,19 +200,10 @@
       }
     }
 
-    function setMessageCount(count) {
-      if (msgs.length > count) {
-        msgs.length = count;
-        return;
-      }
-
-      while (msgs.length < count) {
-        msgs.push(new Msg());
-      }
-    }
-
-    function resetMessages() {
-      msgs.forEach((m, index) => m.reset(index % 24));
+    function syncMessages() {
+      const target = isMobile ? 18 : 50;
+      if (msgs.length === target) return;
+      msgs = Array.from({ length: target }, () => new Msg());
     }
 
     function roundRect(ctx, x, y, w, h, r) {
@@ -281,13 +220,9 @@
 
     function resize() {
       const rect = wrap.getBoundingClientRect();
-      W = Math.max(280, Math.floor(rect.width));
-      H = Math.max(260, Math.floor(rect.height));
-      const nextMobile = W < 540;
-      const modeChanged = nextMobile !== isMobile;
-      isMobile = nextMobile;
-      const current = cfg();
-
+      W = Math.max(300, Math.floor(rect.width));
+      H = Math.max(300, Math.floor(rect.height));
+      isMobile = W < 540;
       dpr = Math.min(window.devicePixelRatio || 1, 2);
       cv.width = Math.floor(W * dpr);
       cv.height = Math.floor(H * dpr);
@@ -295,16 +230,14 @@
       cv.style.height = H + 'px';
       cx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-      CX = isMobile ? W * 0.5 : W / 2;
-      CY = isMobile ? H * 0.48 : H / 2;
-      EHW = Math.min(W * current.trackWidth, 600);
-      EHH = Math.min(H * current.trackHeight, 185);
-      RR = Math.min(W, H) * current.radarScale;
+      CX = W / 2;
+      CY = H / 2;
+      EHW = Math.min(W * (isMobile ? 0.40 : 0.44), 600);
+      EHH = Math.min(H * (isMobile ? 0.25 : 0.30), 185);
+      RR = Math.min(W, H) * (isMobile ? 0.20 : 0.24);
       DR = RR * 1.05;
-
-      setMessageCount(current.messageCount);
-      if (modeChanged) resetMessages();
       makeStars();
+      syncMessages();
     }
 
     function drawMsg(m){
@@ -313,7 +246,7 @@
       const alpha = Math.max(0, Math.min(1, ef * 1.4));
       if (alpha <= 0.02) return;
       const c = T[m.type];
-      const scale = m.size * (0.6 + ef * 0.4) * cfg().messageScale;
+      const scale = m.size * (0.6 + ef * 0.4) * (isMobile ? 0.76 : 1);
       cx.save();
       cx.globalAlpha = alpha;
       cx.translate(x, y);
@@ -366,8 +299,7 @@
       cx.restore();
     }
 
-    function drawHud(){
-      const current = cfg();
+    function drawHud() {
       const pad = isMobile ? 18 : 28;
       cx.fillStyle = `rgba(${T.radar},0.8)`;
       cx.font = `${isMobile ? '700 12px' : '700 13px'} Inter, system-ui, sans-serif`;
@@ -379,7 +311,7 @@
       cx.fillText('сканирует поток сообщений', pad, isMobile ? 38 : 44);
 
       cx.fillStyle = `rgba(${T.radar},0.9)`;
-      cx.font = `${isMobile ? '700 24px' : '700 34px'} Inter, system-ui, sans-serif`;
+      cx.font = `${isMobile ? '700 25px' : '700 34px'} Inter, system-ui, sans-serif`;
       cx.textAlign = 'right';
       cx.textBaseline = 'top';
       cx.fillText(leads, W - pad, isMobile ? 18 : 24);
@@ -387,7 +319,7 @@
       cx.font = `${isMobile ? '600 8px' : '600 9px'} Inter, system-ui, sans-serif`;
       cx.fillText('ЛИДОВ НАЙДЕНО', W - pad, isMobile ? 48 : 62);
 
-      if (!current.showLegend) return;
+      if (isMobile) return;
 
       [
         ['rgba(80,200,135,0.8)','● релевантный лид'],
@@ -398,7 +330,7 @@
         cx.font = '500 10px Inter, system-ui, sans-serif';
         cx.textAlign = 'left';
         cx.textBaseline = 'bottom';
-        cx.fillText(txt, pad, H - 20 - i * 18);
+        cx.fillText(txt, 28, H - 20 - i * 18);
       });
     }
 
@@ -458,7 +390,7 @@
         const dist = Math.sqrt((x - CX) ** 2 + (y - CY) ** 2);
         if (!m.detected && dist < DR) { m.detected = true; m.flash = 1; if (m.type === 'lead') leads++; }
         if (m.detected && dist > DR && x > CX) m.detected = false;
-        if (m.tx > 1.05) m.reset(Math.floor(Math.random() * 30));
+        if (m.tx > 1.12) m.reset(Math.floor(Math.random() * (isMobile ? 8 : 30)));
         drawMsg(m);
       });
 
@@ -481,18 +413,18 @@
       cx.restore();
 
       const p = Math.sin(frame * 0.04) * 0.25 + 0.75;
+      const coreGlow = isMobile ? 30 : 36;
       cx.save();
-      const coreOuter = isMobile ? 28 : 36;
-      const cg = cx.createRadialGradient(CX, CY, 0, CX, CY, coreOuter);
+      const cg = cx.createRadialGradient(CX, CY, 0, CX, CY, coreGlow);
       cg.addColorStop(0, `rgba(${T.core},${0.5 * p})`);
       cg.addColorStop(0.4, `rgba(${T.core},${0.2 * p})`);
       cg.addColorStop(1, `rgba(${T.core},0)`);
       cx.fillStyle = cg;
       cx.beginPath();
-      cx.arc(CX, CY, coreOuter, 0, Math.PI * 2);
+      cx.arc(CX, CY, coreGlow, 0, Math.PI * 2);
       cx.fill();
       cx.shadowColor = `rgb(${T.core})`;
-      cx.shadowBlur = (isMobile ? 14 : 18) * p;
+      cx.shadowBlur = (isMobile ? 15 : 18) * p;
       cx.beginPath();
       cx.arc(CX, CY, isMobile ? 8 : 10, 0, Math.PI * 2);
       cx.fillStyle = `rgba(${T.core},0.95)`;
