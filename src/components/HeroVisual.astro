@@ -1,136 +1,377 @@
 ---
-const { site, example } = Astro.props;
-
-const rows = [
-  // Верхняя дуга: внешний, средний и внутренний ряды
-  { name: 'top-outer', side: 'top', count: 24, x0: 6.0, x1: 94.0, amp: 25.8, offset: 0, size: 'medium' },
-  { name: 'top-mid', side: 'top', count: 17, x0: 13.0, x1: 87.0, amp: 21.0, offset: 3.7, size: 'small' },
-  { name: 'top-inner', side: 'top', count: 10, x0: 27.0, x1: 73.0, amp: 15.0, offset: 7.2, size: 'tiny' },
-
-  // Нижняя дуга: внешний, средний и внутренний ряды
-  { name: 'bottom-outer', side: 'bottom', count: 25, x0: 6.0, x1: 94.0, amp: 24.7, offset: 0, size: 'medium' },
-  { name: 'bottom-mid', side: 'bottom', count: 18, x0: 12.5, x1: 87.5, amp: 20.4, offset: -3.8, size: 'small' },
-  { name: 'bottom-inner', side: 'bottom', count: 11, x0: 24.0, x1: 76.0, amp: 14.6, offset: -7.2, size: 'tiny' },
-];
-
-function sizeFor(t, rowSize, index) {
-  const edge = Math.min(t, 1 - t);
-  const edgeFactor = edge < 0.07 ? 0.68 : edge < 0.14 ? 0.78 : 1;
-  const rhythm = [0.92, 1, 0.84, 1.08, 0.96][index % 5];
-  const base = rowSize === 'medium' ? 1 : rowSize === 'small' ? 0.82 : 0.68;
-  return +(base * edgeFactor * rhythm).toFixed(2);
-}
-
-function widthFor(scale, index) {
-  const base = [32, 36, 27, 31, 40, 29][index % 6];
-  return Math.round(base * scale);
-}
-
-function heightFor(scale, index) {
-  const base = [18, 20, 16, 18, 21, 17][index % 6];
-  return Math.round(base * scale);
-}
-
-function toneFor(x, rowName, index) {
-  // Цвета раскладываем кластерами, а не равномерно по всей линии.
-  const coralClusters = [
-    x >= 7 && x <= 12,
-    x >= 68 && x <= 79 && rowName.includes('top'),
-    x >= 58 && x <= 68 && rowName.includes('bottom'),
-    x >= 82 && x <= 90 && rowName.includes('bottom'),
-  ];
-  const mintClusters = [
-    x >= 34 && x <= 49 && rowName.includes('top'),
-    x >= 78 && x <= 88 && rowName.includes('top'),
-    x >= 16 && x <= 25 && rowName.includes('bottom'),
-    x >= 49 && x <= 57 && rowName.includes('bottom'),
-  ];
-
-  if (coralClusters.some(Boolean) && index % 3 !== 1) return 'coral';
-  if (mintClusters.some(Boolean) && index % 3 !== 2) return 'mint';
-  if (index % 7 === 0) return 'soft';
-  return 'slate';
-}
-
-const bubbles = rows.flatMap((row, rowIndex) =>
-  Array.from({ length: row.count }, (_, index) => {
-    const t = index / (row.count - 1);
-    const x = row.x0 + t * (row.x1 - row.x0);
-    const arc = Math.sin(t * Math.PI);
-    const stagger = ((index % 2) - 0.5) * 1.8 + Math.sin(index * 0.9 + rowIndex) * 0.45;
-    const yBase = row.side === 'top'
-      ? 52 - arc * row.amp + row.offset
-      : 52 + arc * row.amp + row.offset;
-    const y = yBase + stagger;
-    const scale = sizeFor(t, row.size, index);
-    const width = widthFor(scale, index);
-    const height = heightFor(scale, index);
-    const rotation = row.side === 'top'
-      ? -8 + t * 16 + Math.sin(index * 0.5) * 1.5
-      : 8 - t * 16 + Math.cos(index * 0.5) * 1.5;
-
-    return {
-      x,
-      y,
-      width,
-      height,
-      rotation,
-      tone: toneFor(x, row.name, index),
-      row: row.name,
-    };
-  })
-);
-
-const toneToClass = {
-  coral: 'eye-bubble-coral',
-  mint: 'eye-bubble-mint',
-  soft: 'eye-bubble-soft',
-  slate: 'eye-bubble-slate'
-};
+// Current animated Hero visual.
+// The previous static version is preserved in src/components/HeroVisualLegacy.astro.
 ---
-<div class="hero-visual" aria-label="Как ChatRadar находит важные сообщения">
-  <div class="message-eye message-eye-layered" aria-hidden="true">
-    <div class="radar-grid"></div>
-    <div class="radar-sweep"></div>
-
-    {bubbles.map((bubble, index) => (
-      <span
-        class={`eye-bubble ${toneToClass[bubble.tone]} eye-row-${bubble.row}`}
-        style={`--x:${bubble.x.toFixed(2)}; --y:${bubble.y.toFixed(2)}; --w:${bubble.width}; --h:${bubble.height}; --r:${bubble.rotation.toFixed(2)}deg; --d:${index * 13}ms;`}
-      >
-        <i></i>
-      </span>
-    ))}
-
-    <div class="eye-core">
-      <span></span>
-    </div>
-  </div>
-
-  <div class="pipeline pipeline-v2">
-    <article class="pipeline-card chat-card">
-      <div class="pipeline-label"><span>1</span>Сообщение в чате</div>
-      <small>{example.source} · {example.author}</small>
-      <p>{example.message}</p>
-    </article>
-
-    <span class="arrow">→</span>
-
-    <article class="pipeline-card llm-card">
-      <div class="pipeline-label"><span>2</span>Анализ LLM</div>
-      <small>Проверка по вашей логике</small>
-      <strong>{example.category}</strong>
-      <em>Уверенность: {example.confidence}</em>
-      <p class="pipeline-reason">{example.reason}</p>
-    </article>
-
-    <span class="arrow">→</span>
-
-    <article class="pipeline-card notification">
-      <div class="pipeline-label"><span>3</span>Уведомление в Telegram</div>
-      <small>ChatRadar bot</small>
-      <p><b>Новый релевантный запрос</b><br />{example.author} ищет решение в чате.</p>
-      <a href={site.botUrl} target="_blank" rel="noreferrer">Открыть сообщение</a>
-    </article>
+<div class="hero-visual hero-visual-animated" aria-label="ChatRadar сканирует поток сообщений">
+  <div class="hero-animation-card" data-chatradar-eye-wrap>
+    <canvas data-chatradar-eye-canvas></canvas>
   </div>
 </div>
+
+<style>
+  .hero-visual-animated {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+
+  .hero-animation-card {
+    position: relative;
+    width: min(780px, 100%);
+    height: 585px;
+    margin-left: auto;
+    overflow: hidden;
+    border-radius: 34px;
+    background: #081311;
+    box-shadow: 0 30px 100px rgba(0, 0, 0, .42);
+    border: 1px solid rgba(255, 255, 255, .08);
+    isolation: isolate;
+  }
+
+  .hero-animation-card canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  @media (max-width: 980px) {
+    .hero-visual-animated {
+      justify-content: center;
+    }
+
+    .hero-animation-card {
+      width: min(760px, 100%);
+      height: min(74vw, 560px);
+      min-height: 390px;
+      margin: 0 auto;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .hero-animation-card {
+      height: 360px;
+      min-height: 360px;
+      border-radius: 26px;
+    }
+  }
+</style>
+
+<script is:inline>
+(() => {
+  const canvases = document.querySelectorAll('[data-chatradar-eye-canvas]');
+
+  canvases.forEach((cv) => {
+    if (cv.dataset.ready === 'true') return;
+    cv.dataset.ready = 'true';
+
+    const wrap = cv.closest('[data-chatradar-eye-wrap]');
+    const cx = cv.getContext('2d');
+    if (!wrap || !cx) return;
+
+    let W = 0;
+    let H = 0;
+    let CX = 0;
+    let CY = 0;
+    let EHW = 0;
+    let EHH = 0;
+    let RR = 0;
+    let DR = 0;
+    let dpr = 1;
+    let sweep = 0;
+    let leads = 0;
+    let frame = 0;
+    let rafId = 0;
+
+    const T = {
+      bgInner:'#0f1f1a', bgOuter:'#081311',
+      lead:   {fill:'rgba(80,200,135,0.16)', border:'rgba(80,200,135,0.5)', av:'rgba(80,200,135,0.32)', dot:'rgba(165,235,190,0.92)', glow:'#50c887'},
+      skip:   {fill:'rgba(225,130,95,0.14)', border:'rgba(225,130,95,0.42)', av:'rgba(225,130,95,0.26)', dot:'rgba(240,180,150,0.82)', glow:'#e1825f'},
+      neutral:{fill:'rgba(100,130,135,0.09)',border:'rgba(100,130,135,0.2)', av:'rgba(100,130,135,0.15)', dot:'rgba(150,170,175,0.55)', glow:'#8a9ea0'},
+      radar:'90,200,150', core:'170,240,200',
+    };
+
+    const TYPES = ['lead','lead','lead','lead','lead','skip','skip','skip','neutral','neutral'];
+    const AVATARS = ['АК','МВ','ДС','ОЛ','СП','АН','РК','ТМ','НВ','ЕФ','ИГ','ВД','АП','КЛ','МС','БА','УР','ГВ','ПН','ЛЮ'];
+    const stars = [];
+
+    function eyeH(tx){ return Math.sin(tx * Math.PI) * EHH; }
+
+    function makeStars() {
+      stars.length = 0;
+      const amount = Math.max(80, Math.round((W * H) / 4200));
+      for (let i = 0; i < amount; i++) {
+        stars.push({
+          x: Math.random() * W,
+          y: Math.random() * H,
+          r: Math.random() * 1.3 + 0.3,
+          base: Math.random() * 0.4 + 0.1,
+          tw: Math.random() * Math.PI * 2,
+          twSpeed: 0.01 + Math.random() * 0.02,
+        });
+      }
+    }
+
+    class Msg {
+      constructor(){ this.reset(); this.tx = Math.random(); }
+      reset(st = 0){
+        this.tx = -0.05;
+        this.lane = Math.random() * 2 - 1;
+        this.speed = 0.0007 + Math.random() * 0.0004;
+        this.type = TYPES[Math.floor(Math.random() * TYPES.length)];
+        this.av = AVATARS[Math.floor(Math.random() * AVATARS.length)];
+        this.bob = Math.random() * Math.PI * 2;
+        this.bobAmp = 4 + Math.random() * 5;
+        this.size = 0.85 + Math.random() * 0.3;
+        this.stagger = st;
+        this.detected = false;
+        this.flash = 0;
+      }
+      pos(){
+        const x = CX - EHW + this.tx * (EHW * 2);
+        const y = CY + this.lane * eyeH(this.tx) + Math.sin(this.bob) * this.bobAmp;
+        return { x, y };
+      }
+    }
+
+    const msgs = Array.from({ length: 50 }, () => new Msg());
+
+    function roundRect(ctx, x, y, w, h, r) {
+      if (typeof ctx.roundRect === 'function') {
+        ctx.roundRect(x, y, w, h, r);
+        return;
+      }
+      ctx.moveTo(x + r, y);
+      ctx.arcTo(x + w, y, x + w, y + h, r);
+      ctx.arcTo(x + w, y + h, x, y + h, r);
+      ctx.arcTo(x, y + h, x, y, r);
+      ctx.arcTo(x, y, x + w, y, r);
+    }
+
+    function resize() {
+      const rect = wrap.getBoundingClientRect();
+      W = Math.max(320, Math.floor(rect.width));
+      H = Math.max(320, Math.floor(rect.height));
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      cv.width = Math.floor(W * dpr);
+      cv.height = Math.floor(H * dpr);
+      cv.style.width = W + 'px';
+      cv.style.height = H + 'px';
+      cx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      CX = W / 2;
+      CY = H / 2;
+      EHW = Math.min(W * 0.44, 600);
+      EHH = Math.min(H * 0.30, 185);
+      RR = Math.min(W, H) * 0.24;
+      DR = RR * 1.05;
+      makeStars();
+    }
+
+    function drawMsg(m){
+      const {x, y} = m.pos();
+      const ef = Math.sin(Math.max(0, Math.min(1, m.tx)) * Math.PI);
+      const alpha = Math.max(0, Math.min(1, ef * 1.4));
+      if (alpha <= 0.02) return;
+      const c = T[m.type];
+      const scale = m.size * (0.6 + ef * 0.4);
+      cx.save();
+      cx.globalAlpha = alpha;
+      cx.translate(x, y);
+      cx.scale(scale, scale);
+
+      const PW = 54, PH = 21, R = 7;
+      const px = -PW / 2, py = -PH / 2;
+      const fl = m.flash > 0;
+      if (fl) { cx.shadowColor = c.glow; cx.shadowBlur = 15 * m.flash; }
+
+      cx.beginPath();
+      roundRect(cx, px, py, PW, PH, R);
+      cx.fillStyle = c.fill;
+      cx.fill();
+      cx.strokeStyle = fl ? c.glow : c.border;
+      cx.lineWidth = fl ? 1.5 : 1;
+      cx.stroke();
+      cx.shadowBlur = 0;
+
+      cx.beginPath();
+      cx.moveTo(px + 8, py + PH);
+      cx.lineTo(px + 4, py + PH + 5);
+      cx.lineTo(px + 15, py + PH);
+      cx.closePath();
+      cx.fillStyle = c.fill;
+      cx.fill();
+      cx.strokeStyle = fl ? c.glow : c.border;
+      cx.lineWidth = fl ? 1.4 : 1;
+      cx.stroke();
+      cx.beginPath();
+      cx.moveTo(px + 5, py + PH - 0.5);
+      cx.lineTo(px + 15, py + PH - 0.5);
+      cx.strokeStyle = c.fill;
+      cx.lineWidth = 2;
+      cx.stroke();
+
+      const dotY = py + PH / 2;
+      cx.beginPath();
+      cx.arc(px + 9, dotY, 4.5, 0, Math.PI * 2);
+      cx.fillStyle = c.av;
+      cx.fill();
+
+      cx.fillStyle = c.dot;
+      [px + 18, px + 27, px + 36].forEach((dx) => {
+        cx.beginPath();
+        cx.arc(dx, dotY, 1.5, 0, Math.PI * 2);
+        cx.fill();
+      });
+
+      cx.restore();
+    }
+
+    function loop(){
+      frame++;
+      const bg = cx.createRadialGradient(CX, CY, 0, CX, CY, Math.max(W, H) * 0.6);
+      bg.addColorStop(0, T.bgInner);
+      bg.addColorStop(1, T.bgOuter);
+      cx.fillStyle = bg;
+      cx.fillRect(0, 0, W, H);
+
+      stars.forEach((s) => {
+        s.tw += s.twSpeed;
+        const a = s.base + Math.sin(s.tw) * s.base * 0.7;
+        cx.globalAlpha = Math.max(0, a);
+        cx.beginPath();
+        cx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        cx.fillStyle = 'rgba(180,220,200,1)';
+        cx.fill();
+      });
+      cx.globalAlpha = 1;
+
+      sweep += 0.006;
+
+      cx.save();
+      const zg = cx.createRadialGradient(CX, CY, 0, CX, CY, RR * 1.6);
+      zg.addColorStop(0, 'rgba(45,75,62,0.3)');
+      zg.addColorStop(0.6, 'rgba(30,50,42,0.15)');
+      zg.addColorStop(1, 'rgba(20,30,28,0)');
+      cx.fillStyle = zg;
+      cx.beginPath();
+      cx.arc(CX, CY, RR * 1.6, 0, Math.PI * 2);
+      cx.fill();
+      [0.38,0.62,0.88,1.15,1.45].forEach((f, i) => {
+        cx.beginPath();
+        cx.arc(CX, CY, RR * f, 0, Math.PI * 2);
+        cx.strokeStyle = `rgba(${T.radar},${0.1 - i * 0.015})`;
+        cx.lineWidth = 1;
+        cx.stroke();
+      });
+      cx.beginPath();
+      cx.moveTo(CX - RR * 1.45, CY);
+      cx.lineTo(CX + RR * 1.45, CY);
+      cx.moveTo(CX, CY - RR * 1.45);
+      cx.lineTo(CX, CY + RR * 1.45);
+      cx.strokeStyle = `rgba(${T.radar},0.05)`;
+      cx.lineWidth = 0.6;
+      cx.stroke();
+      cx.restore();
+
+      msgs.forEach((m) => {
+        if (m.stagger > 0) { m.stagger--; return; }
+        m.tx += m.speed;
+        m.bob += 0.02;
+        if (m.flash > 0) m.flash -= 0.04;
+        const {x, y} = m.pos();
+        const dist = Math.sqrt((x - CX) ** 2 + (y - CY) ** 2);
+        if (!m.detected && dist < DR) { m.detected = true; m.flash = 1; if (m.type === 'lead') leads++; }
+        if (m.detected && dist > DR && x > CX) m.detected = false;
+        if (m.tx > 1.05) m.reset(Math.floor(Math.random() * 30));
+        drawMsg(m);
+      });
+
+      cx.save();
+      cx.beginPath();
+      cx.moveTo(CX, CY);
+      cx.arc(CX, CY, RR * 1.45, sweep, sweep + 0.4);
+      cx.closePath();
+      const sg = cx.createRadialGradient(CX, CY, 0, CX, CY, RR * 1.45);
+      sg.addColorStop(0, `rgba(${T.radar},0.13)`);
+      sg.addColorStop(1, `rgba(${T.radar},0)`);
+      cx.fillStyle = sg;
+      cx.fill();
+      cx.beginPath();
+      cx.moveTo(CX, CY);
+      cx.lineTo(CX + Math.cos(sweep) * RR * 1.45, CY + Math.sin(sweep) * RR * 1.45);
+      cx.strokeStyle = `rgba(${T.radar},0.4)`;
+      cx.lineWidth = 1.3;
+      cx.stroke();
+      cx.restore();
+
+      const p = Math.sin(frame * 0.04) * 0.25 + 0.75;
+      cx.save();
+      const cg = cx.createRadialGradient(CX, CY, 0, CX, CY, 36);
+      cg.addColorStop(0, `rgba(${T.core},${0.5 * p})`);
+      cg.addColorStop(0.4, `rgba(${T.core},${0.2 * p})`);
+      cg.addColorStop(1, `rgba(${T.core},0)`);
+      cx.fillStyle = cg;
+      cx.beginPath();
+      cx.arc(CX, CY, 36, 0, Math.PI * 2);
+      cx.fill();
+      cx.shadowColor = `rgb(${T.core})`;
+      cx.shadowBlur = 18 * p;
+      cx.beginPath();
+      cx.arc(CX, CY, 10, 0, Math.PI * 2);
+      cx.fillStyle = `rgba(${T.core},0.95)`;
+      cx.fill();
+      cx.shadowBlur = 0;
+      cx.beginPath();
+      cx.arc(CX, CY, 4.5, 0, Math.PI * 2);
+      cx.fillStyle = 'rgba(15,40,32,0.6)';
+      cx.fill();
+      cx.restore();
+
+      cx.fillStyle = `rgba(${T.radar},0.8)`;
+      cx.font = '700 13px Inter, system-ui, sans-serif';
+      cx.textAlign = 'left';
+      cx.textBaseline = 'top';
+      cx.fillText('ChatRadar', 28, 26);
+      cx.fillStyle = `rgba(${T.radar},0.32)`;
+      cx.font = '500 10px Inter, system-ui, sans-serif';
+      cx.fillText('сканирует поток сообщений', 28, 44);
+
+      cx.fillStyle = `rgba(${T.radar},0.9)`;
+      cx.font = '700 34px Inter, system-ui, sans-serif';
+      cx.textAlign = 'right';
+      cx.textBaseline = 'top';
+      cx.fillText(leads, W - 28, 24);
+      cx.fillStyle = `rgba(${T.radar},0.3)`;
+      cx.font = '600 9px Inter, system-ui, sans-serif';
+      cx.fillText('ЛИДОВ НАЙДЕНО', W - 28, 62);
+
+      [
+        ['rgba(80,200,135,0.8)','● релевантный лид'],
+        ['rgba(225,130,95,0.75)','● нерелевантное'],
+        ['rgba(100,130,135,0.5)','● нейтральное'],
+      ].forEach(([col, txt], i) => {
+        cx.fillStyle = col;
+        cx.font = '500 10px Inter, system-ui, sans-serif';
+        cx.textAlign = 'left';
+        cx.textBaseline = 'bottom';
+        cx.fillText(txt, 28, H - 20 - i * 18);
+      });
+
+      rafId = requestAnimationFrame(loop);
+    }
+
+    resize();
+    const observer = new ResizeObserver(() => resize());
+    observer.observe(wrap);
+    rafId = requestAnimationFrame(loop);
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        cancelAnimationFrame(rafId);
+      } else {
+        rafId = requestAnimationFrame(loop);
+      }
+    });
+  });
+})();
+</script>
