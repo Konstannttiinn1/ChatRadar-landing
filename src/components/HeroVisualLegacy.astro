@@ -1,110 +1,9 @@
 ---
 const { site, example } = Astro.props;
-
-const rows = [
-  // Верхняя дуга: внешний, средний и внутренний ряды
-  { name: 'top-outer', side: 'top', count: 24, x0: 6.0, x1: 94.0, amp: 25.8, offset: 0, size: 'medium' },
-  { name: 'top-mid', side: 'top', count: 17, x0: 13.0, x1: 87.0, amp: 21.0, offset: 3.7, size: 'small' },
-  { name: 'top-inner', side: 'top', count: 10, x0: 27.0, x1: 73.0, amp: 15.0, offset: 7.2, size: 'tiny' },
-
-  // Нижняя дуга: внешний, средний и внутренний ряды
-  { name: 'bottom-outer', side: 'bottom', count: 25, x0: 6.0, x1: 94.0, amp: 24.7, offset: 0, size: 'medium' },
-  { name: 'bottom-mid', side: 'bottom', count: 18, x0: 12.5, x1: 87.5, amp: 20.4, offset: -3.8, size: 'small' },
-  { name: 'bottom-inner', side: 'bottom', count: 11, x0: 24.0, x1: 76.0, amp: 14.6, offset: -7.2, size: 'tiny' },
-];
-
-function sizeFor(t, rowSize, index) {
-  const edge = Math.min(t, 1 - t);
-  const edgeFactor = edge < 0.07 ? 0.68 : edge < 0.14 ? 0.78 : 1;
-  const rhythm = [0.92, 1, 0.84, 1.08, 0.96][index % 5];
-  const base = rowSize === 'medium' ? 1 : rowSize === 'small' ? 0.82 : 0.68;
-  return +(base * edgeFactor * rhythm).toFixed(2);
-}
-
-function widthFor(scale, index) {
-  const base = [32, 36, 27, 31, 40, 29][index % 6];
-  return Math.round(base * scale);
-}
-
-function heightFor(scale, index) {
-  const base = [18, 20, 16, 18, 21, 17][index % 6];
-  return Math.round(base * scale);
-}
-
-function toneFor(x, rowName, index) {
-  // Цвета раскладываем кластерами, а не равномерно по всей линии.
-  const coralClusters = [
-    x >= 7 && x <= 12,
-    x >= 68 && x <= 79 && rowName.includes('top'),
-    x >= 58 && x <= 68 && rowName.includes('bottom'),
-    x >= 82 && x <= 90 && rowName.includes('bottom'),
-  ];
-  const mintClusters = [
-    x >= 34 && x <= 49 && rowName.includes('top'),
-    x >= 78 && x <= 88 && rowName.includes('top'),
-    x >= 16 && x <= 25 && rowName.includes('bottom'),
-    x >= 49 && x <= 57 && rowName.includes('bottom'),
-  ];
-
-  if (coralClusters.some(Boolean) && index % 3 !== 1) return 'coral';
-  if (mintClusters.some(Boolean) && index % 3 !== 2) return 'mint';
-  if (index % 7 === 0) return 'soft';
-  return 'slate';
-}
-
-const bubbles = rows.flatMap((row, rowIndex) =>
-  Array.from({ length: row.count }, (_, index) => {
-    const t = index / (row.count - 1);
-    const x = row.x0 + t * (row.x1 - row.x0);
-    const arc = Math.sin(t * Math.PI);
-    const stagger = ((index % 2) - 0.5) * 1.8 + Math.sin(index * 0.9 + rowIndex) * 0.45;
-    const yBase = row.side === 'top'
-      ? 52 - arc * row.amp + row.offset
-      : 52 + arc * row.amp + row.offset;
-    const y = yBase + stagger;
-    const scale = sizeFor(t, row.size, index);
-    const width = widthFor(scale, index);
-    const height = heightFor(scale, index);
-    const rotation = row.side === 'top'
-      ? -8 + t * 16 + Math.sin(index * 0.5) * 1.5
-      : 8 - t * 16 + Math.cos(index * 0.5) * 1.5;
-
-    return {
-      x,
-      y,
-      width,
-      height,
-      rotation,
-      tone: toneFor(x, row.name, index),
-      row: row.name,
-    };
-  })
-);
-
-const toneToClass = {
-  coral: 'eye-bubble-coral',
-  mint: 'eye-bubble-mint',
-  soft: 'eye-bubble-soft',
-  slate: 'eye-bubble-slate'
-};
 ---
 <div class="hero-visual" aria-label="Как ChatRadar находит важные сообщения">
-  <div class="message-eye message-eye-layered" aria-hidden="true">
-    <div class="radar-grid"></div>
-    <div class="radar-sweep"></div>
-
-    {bubbles.map((bubble, index) => (
-      <span
-        class={`eye-bubble ${toneToClass[bubble.tone]} eye-row-${bubble.row}`}
-        style={`--x:${bubble.x.toFixed(2)}; --y:${bubble.y.toFixed(2)}; --w:${bubble.width}; --h:${bubble.height}; --r:${bubble.rotation.toFixed(2)}deg; --d:${index * 13}ms;`}
-      >
-        <i></i>
-      </span>
-    ))}
-
-    <div class="eye-core">
-      <span></span>
-    </div>
+  <div class="message-eye message-eye-animated" aria-hidden="true" data-chatradar-eye-wrap>
+    <canvas data-chatradar-eye-canvas></canvas>
   </div>
 
   <div class="pipeline pipeline-v2">
@@ -134,3 +33,396 @@ const toneToClass = {
     </article>
   </div>
 </div>
+
+<style>
+  .message-eye-animated {
+    overflow: hidden;
+    border-radius: 34px;
+    background: #081311;
+    border: 1px solid rgba(255, 255, 255, .08);
+    filter: drop-shadow(0 30px 100px rgba(0, 0, 0, .42));
+  }
+
+  .message-eye-animated::before,
+  .message-eye-animated::after {
+    display: none;
+  }
+
+  .message-eye-animated canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  @media (max-width: 760px) {
+    .message-eye-animated {
+      border-radius: 26px;
+    }
+  }
+</style>
+
+<script is:inline>
+(() => {
+  const canvases = document.querySelectorAll('[data-chatradar-eye-canvas]');
+
+  canvases.forEach((cv) => {
+    if (cv.dataset.ready === 'true') return;
+    cv.dataset.ready = 'true';
+
+    const wrap = cv.closest('[data-chatradar-eye-wrap]');
+    const ctx = cv.getContext('2d');
+    if (!wrap || !ctx) return;
+
+    let W = 0;
+    let H = 0;
+    let CX = 0;
+    let CY = 0;
+    let EHW = 0;
+    let EHH = 0;
+    let RR = 0;
+    let DR = 0;
+    let dpr = 1;
+    let isMobile = false;
+    let sweep = 0;
+    let leads = 0;
+    let frame = 0;
+    let rafId = 0;
+    let msgs = [];
+
+    const T = {
+      bgInner: '#0f1f1a',
+      bgOuter: '#081311',
+      lead: { fill: 'rgba(80,200,135,0.16)', border: 'rgba(80,200,135,0.5)', av: 'rgba(80,200,135,0.32)', dot: 'rgba(165,235,190,0.92)', glow: '#50c887' },
+      skip: { fill: 'rgba(225,130,95,0.14)', border: 'rgba(225,130,95,0.42)', av: 'rgba(225,130,95,0.26)', dot: 'rgba(240,180,150,0.82)', glow: '#e1825f' },
+      neutral: { fill: 'rgba(100,130,135,0.09)', border: 'rgba(100,130,135,0.2)', av: 'rgba(100,130,135,0.15)', dot: 'rgba(150,170,175,0.55)', glow: '#8a9ea0' },
+      radar: '90,200,150',
+      core: '170,240,200',
+    };
+
+    const TYPES = ['lead','lead','lead','lead','lead','skip','skip','skip','neutral','neutral'];
+    const stars = [];
+
+    function eyeH(tx) {
+      return Math.sin(tx * Math.PI) * EHH;
+    }
+
+    function makeStars() {
+      stars.length = 0;
+      const amount = Math.max(isMobile ? 42 : 80, Math.round((W * H) / (isMobile ? 7600 : 4200)));
+      for (let i = 0; i < amount; i++) {
+        stars.push({
+          x: Math.random() * W,
+          y: Math.random() * H,
+          r: Math.random() * 1.3 + 0.3,
+          base: Math.random() * 0.4 + 0.1,
+          tw: Math.random() * Math.PI * 2,
+          twSpeed: 0.01 + Math.random() * 0.02,
+        });
+      }
+    }
+
+    class Msg {
+      constructor(index) {
+        this.reset(index * 7);
+        this.tx = Math.random();
+      }
+
+      reset(st = 0) {
+        this.tx = -0.12 - Math.random() * 0.18;
+        this.lane = Math.random() * 2 - 1;
+        this.speed = (isMobile ? 0.00115 : 0.0007) + Math.random() * (isMobile ? 0.00055 : 0.0004);
+        this.type = TYPES[Math.floor(Math.random() * TYPES.length)];
+        this.bob = Math.random() * Math.PI * 2;
+        this.bobAmp = (isMobile ? 3 : 4) + Math.random() * (isMobile ? 4 : 5);
+        this.size = 0.85 + Math.random() * 0.3;
+        this.stagger = st;
+        this.detected = false;
+        this.flash = 0;
+      }
+
+      pos() {
+        const x = CX - EHW + this.tx * (EHW * 2);
+        const y = CY + this.lane * eyeH(this.tx) + Math.sin(this.bob) * this.bobAmp;
+        return { x, y };
+      }
+    }
+
+    function syncMessages() {
+      const target = isMobile ? 18 : 50;
+      if (msgs.length === target) return;
+      msgs = Array.from({ length: target }, (_, index) => new Msg(index));
+    }
+
+    function roundRect(x, y, w, h, r) {
+      if (typeof ctx.roundRect === 'function') {
+        ctx.roundRect(x, y, w, h, r);
+        return;
+      }
+      ctx.moveTo(x + r, y);
+      ctx.arcTo(x + w, y, x + w, y + h, r);
+      ctx.arcTo(x + w, y + h, x, y + h, r);
+      ctx.arcTo(x, y + h, x, y, r);
+      ctx.arcTo(x, y, x + w, y, r);
+    }
+
+    function resize() {
+      const rect = wrap.getBoundingClientRect();
+      W = Math.max(300, Math.floor(rect.width));
+      H = Math.max(240, Math.floor(rect.height));
+      isMobile = W < 540;
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+      cv.width = Math.floor(W * dpr);
+      cv.height = Math.floor(H * dpr);
+      cv.style.width = W + 'px';
+      cv.style.height = H + 'px';
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      CX = W / 2;
+      CY = H / 2;
+      EHW = Math.min(W * (isMobile ? 0.40 : 0.44), 600);
+      EHH = Math.min(H * (isMobile ? 0.24 : 0.30), 185);
+      RR = Math.min(W, H) * (isMobile ? 0.20 : 0.24);
+      DR = RR * 1.05;
+
+      makeStars();
+      syncMessages();
+    }
+
+    function drawMsg(m) {
+      const { x, y } = m.pos();
+      const ef = Math.sin(Math.max(0, Math.min(1, m.tx)) * Math.PI);
+      const alpha = Math.max(0, Math.min(1, ef * 1.4));
+      if (alpha <= 0.02) return;
+
+      const c = T[m.type];
+      const scale = m.size * (0.6 + ef * 0.4) * (isMobile ? 0.74 : 1);
+      const PW = 54;
+      const PH = 21;
+      const R = 7;
+      const px = -PW / 2;
+      const py = -PH / 2;
+      const fl = m.flash > 0;
+
+      ctx.save();
+      ctx.globalAlpha = alpha;
+      ctx.translate(x, y);
+      ctx.scale(scale, scale);
+
+      if (fl) {
+        ctx.shadowColor = c.glow;
+        ctx.shadowBlur = 15 * m.flash;
+      }
+
+      ctx.beginPath();
+      roundRect(px, py, PW, PH, R);
+      ctx.fillStyle = c.fill;
+      ctx.fill();
+      ctx.strokeStyle = fl ? c.glow : c.border;
+      ctx.lineWidth = fl ? 1.5 : 1;
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+
+      ctx.beginPath();
+      ctx.moveTo(px + 8, py + PH);
+      ctx.lineTo(px + 4, py + PH + 5);
+      ctx.lineTo(px + 15, py + PH);
+      ctx.closePath();
+      ctx.fillStyle = c.fill;
+      ctx.fill();
+      ctx.strokeStyle = fl ? c.glow : c.border;
+      ctx.lineWidth = fl ? 1.4 : 1;
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(px + 5, py + PH - 0.5);
+      ctx.lineTo(px + 15, py + PH - 0.5);
+      ctx.strokeStyle = c.fill;
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      const dotY = py + PH / 2;
+      ctx.beginPath();
+      ctx.arc(px + 9, dotY, 4.5, 0, Math.PI * 2);
+      ctx.fillStyle = c.av;
+      ctx.fill();
+
+      ctx.fillStyle = c.dot;
+      [px + 18, px + 27, px + 36].forEach((dx) => {
+        ctx.beginPath();
+        ctx.arc(dx, dotY, 1.5, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+      ctx.restore();
+    }
+
+    function drawHud() {
+      const pad = isMobile ? 18 : 28;
+      ctx.fillStyle = `rgba(${T.radar},0.8)`;
+      ctx.font = `${isMobile ? '700 12px' : '700 13px'} Inter, system-ui, sans-serif`;
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'top';
+      ctx.fillText('ChatRadar', pad, isMobile ? 20 : 26);
+      ctx.fillStyle = `rgba(${T.radar},0.32)`;
+      ctx.font = `${isMobile ? '500 9px' : '500 10px'} Inter, system-ui, sans-serif`;
+      ctx.fillText('сканирует поток сообщений', pad, isMobile ? 38 : 44);
+
+      ctx.fillStyle = `rgba(${T.radar},0.9)`;
+      ctx.font = `${isMobile ? '700 25px' : '700 34px'} Inter, system-ui, sans-serif`;
+      ctx.textAlign = 'right';
+      ctx.textBaseline = 'top';
+      ctx.fillText(leads, W - pad, isMobile ? 18 : 24);
+      ctx.fillStyle = `rgba(${T.radar},0.3)`;
+      ctx.font = `${isMobile ? '600 8px' : '600 9px'} Inter, system-ui, sans-serif`;
+      ctx.fillText('ЛИДОВ НАЙДЕНО', W - pad, isMobile ? 48 : 62);
+
+      if (isMobile) return;
+
+      [
+        ['rgba(80,200,135,0.8)', '● релевантный лид'],
+        ['rgba(225,130,95,0.75)', '● нерелевантное'],
+        ['rgba(100,130,135,0.5)', '● нейтральное'],
+      ].forEach(([col, txt], i) => {
+        ctx.fillStyle = col;
+        ctx.font = '500 10px Inter, system-ui, sans-serif';
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'bottom';
+        ctx.fillText(txt, 28, H - 20 - i * 18);
+      });
+    }
+
+    function loop() {
+      frame++;
+
+      const bg = ctx.createRadialGradient(CX, CY, 0, CX, CY, Math.max(W, H) * 0.6);
+      bg.addColorStop(0, T.bgInner);
+      bg.addColorStop(1, T.bgOuter);
+      ctx.fillStyle = bg;
+      ctx.fillRect(0, 0, W, H);
+
+      stars.forEach((s) => {
+        s.tw += s.twSpeed;
+        const a = s.base + Math.sin(s.tw) * s.base * 0.7;
+        ctx.globalAlpha = Math.max(0, a);
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(180,220,200,1)';
+        ctx.fill();
+      });
+      ctx.globalAlpha = 1;
+
+      sweep += 0.006;
+
+      ctx.save();
+      const zg = ctx.createRadialGradient(CX, CY, 0, CX, CY, RR * 1.6);
+      zg.addColorStop(0, 'rgba(45,75,62,0.3)');
+      zg.addColorStop(0.6, 'rgba(30,50,42,0.15)');
+      zg.addColorStop(1, 'rgba(20,30,28,0)');
+      ctx.fillStyle = zg;
+      ctx.beginPath();
+      ctx.arc(CX, CY, RR * 1.6, 0, Math.PI * 2);
+      ctx.fill();
+
+      [0.38, 0.62, 0.88, 1.15, 1.45].forEach((f, i) => {
+        ctx.beginPath();
+        ctx.arc(CX, CY, RR * f, 0, Math.PI * 2);
+        ctx.strokeStyle = `rgba(${T.radar},${0.1 - i * 0.015})`;
+        ctx.lineWidth = 1;
+        ctx.stroke();
+      });
+
+      ctx.beginPath();
+      ctx.moveTo(CX - RR * 1.45, CY);
+      ctx.lineTo(CX + RR * 1.45, CY);
+      ctx.moveTo(CX, CY - RR * 1.45);
+      ctx.lineTo(CX, CY + RR * 1.45);
+      ctx.strokeStyle = `rgba(${T.radar},0.05)`;
+      ctx.lineWidth = 0.6;
+      ctx.stroke();
+      ctx.restore();
+
+      msgs.forEach((m) => {
+        if (m.stagger > 0) {
+          m.stagger--;
+          return;
+        }
+
+        m.tx += m.speed;
+        m.bob += 0.02;
+        if (m.flash > 0) m.flash -= 0.04;
+
+        const { x, y } = m.pos();
+        const dist = Math.sqrt((x - CX) ** 2 + (y - CY) ** 2);
+        if (!m.detected && dist < DR) {
+          m.detected = true;
+          m.flash = 1;
+          if (m.type === 'lead') leads++;
+        }
+        if (m.detected && dist > DR && x > CX) m.detected = false;
+        if (m.tx > 1.12) m.reset(Math.floor(Math.random() * (isMobile ? 8 : 30)));
+
+        drawMsg(m);
+      });
+
+      ctx.save();
+      ctx.beginPath();
+      ctx.moveTo(CX, CY);
+      ctx.arc(CX, CY, RR * 1.45, sweep, sweep + 0.4);
+      ctx.closePath();
+      const sg = ctx.createRadialGradient(CX, CY, 0, CX, CY, RR * 1.45);
+      sg.addColorStop(0, `rgba(${T.radar},0.13)`);
+      sg.addColorStop(1, `rgba(${T.radar},0)`);
+      ctx.fillStyle = sg;
+      ctx.fill();
+      ctx.beginPath();
+      ctx.moveTo(CX, CY);
+      ctx.lineTo(CX + Math.cos(sweep) * RR * 1.45, CY + Math.sin(sweep) * RR * 1.45);
+      ctx.strokeStyle = `rgba(${T.radar},0.4)`;
+      ctx.lineWidth = 1.3;
+      ctx.stroke();
+      ctx.restore();
+
+      const p = Math.sin(frame * 0.04) * 0.25 + 0.75;
+      const coreGlow = isMobile ? 30 : 36;
+      ctx.save();
+      const cg = ctx.createRadialGradient(CX, CY, 0, CX, CY, coreGlow);
+      cg.addColorStop(0, `rgba(${T.core},${0.5 * p})`);
+      cg.addColorStop(0.4, `rgba(${T.core},${0.2 * p})`);
+      cg.addColorStop(1, `rgba(${T.core},0)`);
+      ctx.fillStyle = cg;
+      ctx.beginPath();
+      ctx.arc(CX, CY, coreGlow, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.shadowColor = `rgb(${T.core})`;
+      ctx.shadowBlur = (isMobile ? 15 : 18) * p;
+      ctx.beginPath();
+      ctx.arc(CX, CY, isMobile ? 8 : 10, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${T.core},0.95)`;
+      ctx.fill();
+      ctx.shadowBlur = 0;
+      ctx.beginPath();
+      ctx.arc(CX, CY, isMobile ? 3.5 : 4.5, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(15,40,32,0.6)';
+      ctx.fill();
+      ctx.restore();
+
+      drawHud();
+      rafId = requestAnimationFrame(loop);
+    }
+
+    resize();
+    const observer = new ResizeObserver(resize);
+    observer.observe(wrap);
+    rafId = requestAnimationFrame(loop);
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        cancelAnimationFrame(rafId);
+      } else {
+        rafId = requestAnimationFrame(loop);
+      }
+    });
+  });
+})();
+</script>
