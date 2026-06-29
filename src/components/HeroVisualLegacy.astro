@@ -1,0 +1,136 @@
+---
+const { site, example } = Astro.props;
+
+const rows = [
+  // Верхняя дуга: внешний, средний и внутренний ряды
+  { name: 'top-outer', side: 'top', count: 24, x0: 6.0, x1: 94.0, amp: 25.8, offset: 0, size: 'medium' },
+  { name: 'top-mid', side: 'top', count: 17, x0: 13.0, x1: 87.0, amp: 21.0, offset: 3.7, size: 'small' },
+  { name: 'top-inner', side: 'top', count: 10, x0: 27.0, x1: 73.0, amp: 15.0, offset: 7.2, size: 'tiny' },
+
+  // Нижняя дуга: внешний, средний и внутренний ряды
+  { name: 'bottom-outer', side: 'bottom', count: 25, x0: 6.0, x1: 94.0, amp: 24.7, offset: 0, size: 'medium' },
+  { name: 'bottom-mid', side: 'bottom', count: 18, x0: 12.5, x1: 87.5, amp: 20.4, offset: -3.8, size: 'small' },
+  { name: 'bottom-inner', side: 'bottom', count: 11, x0: 24.0, x1: 76.0, amp: 14.6, offset: -7.2, size: 'tiny' },
+];
+
+function sizeFor(t, rowSize, index) {
+  const edge = Math.min(t, 1 - t);
+  const edgeFactor = edge < 0.07 ? 0.68 : edge < 0.14 ? 0.78 : 1;
+  const rhythm = [0.92, 1, 0.84, 1.08, 0.96][index % 5];
+  const base = rowSize === 'medium' ? 1 : rowSize === 'small' ? 0.82 : 0.68;
+  return +(base * edgeFactor * rhythm).toFixed(2);
+}
+
+function widthFor(scale, index) {
+  const base = [32, 36, 27, 31, 40, 29][index % 6];
+  return Math.round(base * scale);
+}
+
+function heightFor(scale, index) {
+  const base = [18, 20, 16, 18, 21, 17][index % 6];
+  return Math.round(base * scale);
+}
+
+function toneFor(x, rowName, index) {
+  // Цвета раскладываем кластерами, а не равномерно по всей линии.
+  const coralClusters = [
+    x >= 7 && x <= 12,
+    x >= 68 && x <= 79 && rowName.includes('top'),
+    x >= 58 && x <= 68 && rowName.includes('bottom'),
+    x >= 82 && x <= 90 && rowName.includes('bottom'),
+  ];
+  const mintClusters = [
+    x >= 34 && x <= 49 && rowName.includes('top'),
+    x >= 78 && x <= 88 && rowName.includes('top'),
+    x >= 16 && x <= 25 && rowName.includes('bottom'),
+    x >= 49 && x <= 57 && rowName.includes('bottom'),
+  ];
+
+  if (coralClusters.some(Boolean) && index % 3 !== 1) return 'coral';
+  if (mintClusters.some(Boolean) && index % 3 !== 2) return 'mint';
+  if (index % 7 === 0) return 'soft';
+  return 'slate';
+}
+
+const bubbles = rows.flatMap((row, rowIndex) =>
+  Array.from({ length: row.count }, (_, index) => {
+    const t = index / (row.count - 1);
+    const x = row.x0 + t * (row.x1 - row.x0);
+    const arc = Math.sin(t * Math.PI);
+    const stagger = ((index % 2) - 0.5) * 1.8 + Math.sin(index * 0.9 + rowIndex) * 0.45;
+    const yBase = row.side === 'top'
+      ? 52 - arc * row.amp + row.offset
+      : 52 + arc * row.amp + row.offset;
+    const y = yBase + stagger;
+    const scale = sizeFor(t, row.size, index);
+    const width = widthFor(scale, index);
+    const height = heightFor(scale, index);
+    const rotation = row.side === 'top'
+      ? -8 + t * 16 + Math.sin(index * 0.5) * 1.5
+      : 8 - t * 16 + Math.cos(index * 0.5) * 1.5;
+
+    return {
+      x,
+      y,
+      width,
+      height,
+      rotation,
+      tone: toneFor(x, row.name, index),
+      row: row.name,
+    };
+  })
+);
+
+const toneToClass = {
+  coral: 'eye-bubble-coral',
+  mint: 'eye-bubble-mint',
+  soft: 'eye-bubble-soft',
+  slate: 'eye-bubble-slate'
+};
+---
+<div class="hero-visual" aria-label="Как ChatRadar находит важные сообщения">
+  <div class="message-eye message-eye-layered" aria-hidden="true">
+    <div class="radar-grid"></div>
+    <div class="radar-sweep"></div>
+
+    {bubbles.map((bubble, index) => (
+      <span
+        class={`eye-bubble ${toneToClass[bubble.tone]} eye-row-${bubble.row}`}
+        style={`--x:${bubble.x.toFixed(2)}; --y:${bubble.y.toFixed(2)}; --w:${bubble.width}; --h:${bubble.height}; --r:${bubble.rotation.toFixed(2)}deg; --d:${index * 13}ms;`}
+      >
+        <i></i>
+      </span>
+    ))}
+
+    <div class="eye-core">
+      <span></span>
+    </div>
+  </div>
+
+  <div class="pipeline pipeline-v2">
+    <article class="pipeline-card chat-card">
+      <div class="pipeline-label"><span>1</span>Сообщение в чате</div>
+      <small>{example.source} · {example.author}</small>
+      <p>{example.message}</p>
+    </article>
+
+    <span class="arrow">→</span>
+
+    <article class="pipeline-card llm-card">
+      <div class="pipeline-label"><span>2</span>Анализ LLM</div>
+      <small>Проверка по вашей логике</small>
+      <strong>{example.category}</strong>
+      <em>Уверенность: {example.confidence}</em>
+      <p class="pipeline-reason">{example.reason}</p>
+    </article>
+
+    <span class="arrow">→</span>
+
+    <article class="pipeline-card notification">
+      <div class="pipeline-label"><span>3</span>Уведомление в Telegram</div>
+      <small>ChatRadar bot</small>
+      <p><b>Новый релевантный запрос</b><br />{example.author} ищет решение в чате.</p>
+      <a href={site.botUrl} target="_blank" rel="noreferrer">Открыть сообщение</a>
+    </article>
+  </div>
+</div>
