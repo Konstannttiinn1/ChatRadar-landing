@@ -1,0 +1,133 @@
+---
+const { site } = Astro.props;
+
+const actions = [
+  {
+    label: 'Написать в Telegram',
+    href: site.supportUrl,
+    className: 'is-telegram',
+    icon: 'telegram'
+  },
+  {
+    label: 'Открыть бота',
+    href: site.botUrl,
+    className: 'is-bot',
+    icon: 'bot'
+  }
+];
+---
+<div class="floating-contact" aria-label="Быстрая связь">
+  {actions.map((action) => (
+    <a
+      class={`floating-contact__button ${action.className}`}
+      href={action.href}
+      target="_blank"
+      rel="noreferrer"
+      aria-label={action.label}
+      data-label={action.label}
+    >
+      {action.icon === 'telegram' ? (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M20.9 4.2 17.8 19c-.2 1-.8 1.2-1.6.7l-4.5-3.3-2.2 2.1c-.2.2-.4.4-.9.4l.3-4.6 8.4-7.6c.4-.3-.1-.5-.6-.2L6.4 13 2 11.6c-1-.3-1-1 0-1.4L19.2 3.6c.8-.3 1.5.2 1.7.6Z" />
+        </svg>
+      ) : (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 3a7.8 7.8 0 0 0-8 7.7c0 2 .8 3.8 2.2 5.2L5.5 20l4.1-1.4c.8.2 1.6.3 2.4.3a7.8 7.8 0 0 0 8-7.7A7.8 7.8 0 0 0 12 3Zm-3 8.8a1.2 1.2 0 1 1 0-2.4 1.2 1.2 0 0 1 0 2.4Zm3 0a1.2 1.2 0 1 1 0-2.4 1.2 1.2 0 0 1 0 2.4Zm3 0a1.2 1.2 0 1 1 0-2.4 1.2 1.2 0 0 1 0 2.4Z" />
+        </svg>
+      )}
+    </a>
+  ))}
+</div>
+
+<style>
+  .floating-contact {
+    position: fixed;
+    z-index: 80;
+    right: 22px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: grid;
+    gap: 10px;
+    padding: 10px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, .92);
+    border: 1px solid rgba(23, 32, 39, .10);
+    box-shadow: 0 20px 60px rgba(7, 16, 24, .20);
+    backdrop-filter: blur(14px);
+  }
+
+  .floating-contact__button {
+    position: relative;
+    width: 46px;
+    height: 46px;
+    display: grid;
+    place-items: center;
+    border-radius: 999px;
+    color: #fff;
+    transition: transform .2s ease, box-shadow .2s ease;
+  }
+
+  .floating-contact__button:hover {
+    transform: translateY(-2px) scale(1.04);
+  }
+
+  .floating-contact__button::before {
+    content: attr(data-label);
+    position: absolute;
+    right: calc(100% + 12px);
+    top: 50%;
+    transform: translateY(-50%) translateX(8px);
+    opacity: 0;
+    pointer-events: none;
+    white-space: nowrap;
+    padding: 8px 11px;
+    border-radius: 999px;
+    background: rgba(7, 16, 24, .92);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    box-shadow: 0 14px 34px rgba(7, 16, 24, .24);
+    transition: opacity .2s ease, transform .2s ease;
+  }
+
+  .floating-contact__button:hover::before {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0);
+  }
+
+  .floating-contact__button svg {
+    width: 25px;
+    height: 25px;
+    fill: currentColor;
+  }
+
+  .floating-contact__button.is-telegram {
+    background: linear-gradient(135deg, #37aee2, #1688cc);
+    box-shadow: 0 10px 24px rgba(22, 136, 204, .32);
+  }
+
+  .floating-contact__button.is-bot {
+    background: linear-gradient(135deg, #7c4dff, #335cff);
+    box-shadow: 0 10px 24px rgba(73, 79, 255, .30);
+  }
+
+  @media (max-width: 760px) {
+    .floating-contact {
+      right: 14px;
+      top: auto;
+      bottom: 18px;
+      transform: none;
+      gap: 8px;
+      padding: 8px;
+    }
+
+    .floating-contact__button {
+      width: 44px;
+      height: 44px;
+    }
+
+    .floating-contact__button::before {
+      display: none;
+    }
+  }
+</style>
