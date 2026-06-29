@@ -99,7 +99,11 @@ const { site, example } = Astro.props;
       core: '170,240,200',
     };
 
-    const TYPES = ['lead','lead','lead','lead','lead','skip','skip','skip','neutral','neutral'];
+    const TYPES = [
+      'lead', 'lead', 'lead',
+      'skip', 'skip', 'skip', 'skip', 'skip', 'skip',
+      'neutral', 'neutral', 'neutral', 'neutral', 'neutral', 'neutral', 'neutral', 'neutral', 'neutral', 'neutral', 'neutral'
+    ];
     const stars = [];
 
     function eyeH(tx) {
