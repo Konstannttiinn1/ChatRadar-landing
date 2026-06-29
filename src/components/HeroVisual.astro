@@ -13,6 +13,7 @@
     display: flex;
     align-items: center;
     justify-content: flex-end;
+    min-height: 585px;
   }
 
   .hero-animation-card {
@@ -34,24 +35,110 @@
     height: 100%;
   }
 
-  @media (max-width: 980px) {
+  @media (max-width: 1180px) {
     .hero-visual-animated {
       justify-content: center;
+      min-height: auto;
+      margin-top: 12px;
     }
 
     .hero-animation-card {
       width: min(760px, 100%);
-      height: min(74vw, 560px);
-      min-height: 390px;
+      height: 520px;
       margin: 0 auto;
     }
   }
 
-  @media (max-width: 640px) {
+  @media (max-width: 760px) {
+    .hero-visual-animated {
+      margin-top: 18px;
+    }
+
     .hero-animation-card {
-      height: 360px;
-      min-height: 360px;
+      width: 100%;
+      height: auto;
+      min-height: 0;
+      aspect-ratio: 1.16 / 1;
+      max-height: 340px;
       border-radius: 26px;
+    }
+  }
+
+  @media (max-width: 400px) {
+    .hero-animation-card {
+      aspect-ratio: 1.08 / 1;
+      max-height: 318px;
+    }
+  }
+</style>
+
+<style is:global>
+  html,
+  body {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  .hero,
+  .hero-grid,
+  .hero-copy,
+  .container {
+    min-width: 0;
+  }
+
+  @media (max-width: 760px) {
+    .header {
+      gap: 12px;
+      padding: 18px 18px;
+    }
+
+    .header-actions .button {
+      display: none;
+    }
+
+    .hero {
+      padding-top: 112px;
+    }
+
+    .hero h1 {
+      max-width: 100%;
+      font-size: clamp(38px, 12vw, 48px);
+      line-height: 1.04;
+      overflow-wrap: normal;
+    }
+
+    .hero h1 span {
+      display: block;
+    }
+
+    .eyebrow {
+      max-width: 100%;
+      font-size: 11px;
+      line-height: 1.45;
+      letter-spacing: .07em;
+    }
+
+    .hero-text {
+      max-width: 100%;
+      font-size: 16px;
+      line-height: 1.56;
+    }
+
+    .hero-buttons .button {
+      width: 100%;
+      max-width: 100%;
+      min-height: 56px;
+      padding: 0 16px;
+      white-space: normal;
+      text-align: center;
+    }
+
+    .hero-benefits {
+      gap: 12px;
+    }
+
+    .hero-benefits span {
+      padding: 14px 16px;
     }
   }
 </style>
@@ -81,6 +168,7 @@
     let leads = 0;
     let frame = 0;
     let rafId = 0;
+    let isMobile = false;
 
     const T = {
       bgInner:'#0f1f1a', bgOuter:'#081311',
@@ -91,14 +179,13 @@
     };
 
     const TYPES = ['lead','lead','lead','lead','lead','skip','skip','skip','neutral','neutral'];
-    const AVATARS = ['АК','МВ','ДС','ОЛ','СП','АН','РК','ТМ','НВ','ЕФ','ИГ','ВД','АП','КЛ','МС','БА','УР','ГВ','ПН','ЛЮ'];
     const stars = [];
 
     function eyeH(tx){ return Math.sin(tx * Math.PI) * EHH; }
 
     function makeStars() {
       stars.length = 0;
-      const amount = Math.max(80, Math.round((W * H) / 4200));
+      const amount = Math.max(isMobile ? 46 : 80, Math.round((W * H) / (isMobile ? 6200 : 4200)));
       for (let i = 0; i < amount; i++) {
         stars.push({
           x: Math.random() * W,
@@ -118,7 +205,6 @@
         this.lane = Math.random() * 2 - 1;
         this.speed = 0.0007 + Math.random() * 0.0004;
         this.type = TYPES[Math.floor(Math.random() * TYPES.length)];
-        this.av = AVATARS[Math.floor(Math.random() * AVATARS.length)];
         this.bob = Math.random() * Math.PI * 2;
         this.bobAmp = 4 + Math.random() * 5;
         this.size = 0.85 + Math.random() * 0.3;
@@ -149,8 +235,9 @@
 
     function resize() {
       const rect = wrap.getBoundingClientRect();
-      W = Math.max(320, Math.floor(rect.width));
-      H = Math.max(320, Math.floor(rect.height));
+      W = Math.max(280, Math.floor(rect.width));
+      H = Math.max(260, Math.floor(rect.height));
+      isMobile = W < 540;
       dpr = Math.min(window.devicePixelRatio || 1, 2);
       cv.width = Math.floor(W * dpr);
       cv.height = Math.floor(H * dpr);
@@ -158,11 +245,11 @@
       cv.style.height = H + 'px';
       cx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-      CX = W / 2;
-      CY = H / 2;
-      EHW = Math.min(W * 0.44, 600);
-      EHH = Math.min(H * 0.30, 185);
-      RR = Math.min(W, H) * 0.24;
+      CX = isMobile ? W * 0.5 : W / 2;
+      CY = isMobile ? H * 0.48 : H / 2;
+      EHW = Math.min(W * (isMobile ? 0.36 : 0.44), 600);
+      EHH = Math.min(H * (isMobile ? 0.23 : 0.30), 185);
+      RR = Math.min(W, H) * (isMobile ? 0.18 : 0.24);
       DR = RR * 1.05;
       makeStars();
     }
@@ -173,7 +260,7 @@
       const alpha = Math.max(0, Math.min(1, ef * 1.4));
       if (alpha <= 0.02) return;
       const c = T[m.type];
-      const scale = m.size * (0.6 + ef * 0.4);
+      const scale = m.size * (0.6 + ef * 0.4) * (isMobile ? 0.72 : 1);
       cx.save();
       cx.globalAlpha = alpha;
       cx.translate(x, y);
@@ -224,6 +311,39 @@
       });
 
       cx.restore();
+    }
+
+    function drawHud(){
+      const pad = isMobile ? 18 : 28;
+      cx.fillStyle = `rgba(${T.radar},0.8)`;
+      cx.font = `${isMobile ? '700 12px' : '700 13px'} Inter, system-ui, sans-serif`;
+      cx.textAlign = 'left';
+      cx.textBaseline = 'top';
+      cx.fillText('ChatRadar', pad, isMobile ? 20 : 26);
+      cx.fillStyle = `rgba(${T.radar},0.32)`;
+      cx.font = `${isMobile ? '500 9px' : '500 10px'} Inter, system-ui, sans-serif`;
+      cx.fillText('сканирует поток сообщений', pad, isMobile ? 38 : 44);
+
+      cx.fillStyle = `rgba(${T.radar},0.9)`;
+      cx.font = `${isMobile ? '700 24px' : '700 34px'} Inter, system-ui, sans-serif`;
+      cx.textAlign = 'right';
+      cx.textBaseline = 'top';
+      cx.fillText(leads, W - pad, isMobile ? 18 : 24);
+      cx.fillStyle = `rgba(${T.radar},0.3)`;
+      cx.font = `${isMobile ? '600 8px' : '600 9px'} Inter, system-ui, sans-serif`;
+      cx.fillText('ЛИДОВ НАЙДЕНО', W - pad, isMobile ? 48 : 62);
+
+      [
+        ['rgba(80,200,135,0.8)','● релевантный лид'],
+        ['rgba(225,130,95,0.75)','● нерелевантное'],
+        ['rgba(100,130,135,0.5)','● нейтральное'],
+      ].forEach(([col, txt], i) => {
+        cx.fillStyle = col;
+        cx.font = `${isMobile ? '500 9px' : '500 10px'} Inter, system-ui, sans-serif`;
+        cx.textAlign = 'left';
+        cx.textBaseline = 'bottom';
+        cx.fillText(txt, pad, H - (isMobile ? 16 : 20) - i * (isMobile ? 16 : 18));
+      });
     }
 
     function loop(){
@@ -306,57 +426,28 @@
 
       const p = Math.sin(frame * 0.04) * 0.25 + 0.75;
       cx.save();
-      const cg = cx.createRadialGradient(CX, CY, 0, CX, CY, 36);
+      const cg = cx.createRadialGradient(CX, CY, 0, CX, CY, isMobile ? 28 : 36);
       cg.addColorStop(0, `rgba(${T.core},${0.5 * p})`);
       cg.addColorStop(0.4, `rgba(${T.core},${0.2 * p})`);
       cg.addColorStop(1, `rgba(${T.core},0)`);
       cx.fillStyle = cg;
       cx.beginPath();
-      cx.arc(CX, CY, 36, 0, Math.PI * 2);
+      cx.arc(CX, CY, isMobile ? 28 : 36, 0, Math.PI * 2);
       cx.fill();
       cx.shadowColor = `rgb(${T.core})`;
-      cx.shadowBlur = 18 * p;
+      cx.shadowBlur = (isMobile ? 14 : 18) * p;
       cx.beginPath();
-      cx.arc(CX, CY, 10, 0, Math.PI * 2);
+      cx.arc(CX, CY, isMobile ? 8 : 10, 0, Math.PI * 2);
       cx.fillStyle = `rgba(${T.core},0.95)`;
       cx.fill();
       cx.shadowBlur = 0;
       cx.beginPath();
-      cx.arc(CX, CY, 4.5, 0, Math.PI * 2);
+      cx.arc(CX, CY, isMobile ? 3.5 : 4.5, 0, Math.PI * 2);
       cx.fillStyle = 'rgba(15,40,32,0.6)';
       cx.fill();
       cx.restore();
 
-      cx.fillStyle = `rgba(${T.radar},0.8)`;
-      cx.font = '700 13px Inter, system-ui, sans-serif';
-      cx.textAlign = 'left';
-      cx.textBaseline = 'top';
-      cx.fillText('ChatRadar', 28, 26);
-      cx.fillStyle = `rgba(${T.radar},0.32)`;
-      cx.font = '500 10px Inter, system-ui, sans-serif';
-      cx.fillText('сканирует поток сообщений', 28, 44);
-
-      cx.fillStyle = `rgba(${T.radar},0.9)`;
-      cx.font = '700 34px Inter, system-ui, sans-serif';
-      cx.textAlign = 'right';
-      cx.textBaseline = 'top';
-      cx.fillText(leads, W - 28, 24);
-      cx.fillStyle = `rgba(${T.radar},0.3)`;
-      cx.font = '600 9px Inter, system-ui, sans-serif';
-      cx.fillText('ЛИДОВ НАЙДЕНО', W - 28, 62);
-
-      [
-        ['rgba(80,200,135,0.8)','● релевантный лид'],
-        ['rgba(225,130,95,0.75)','● нерелевантное'],
-        ['rgba(100,130,135,0.5)','● нейтральное'],
-      ].forEach(([col, txt], i) => {
-        cx.fillStyle = col;
-        cx.font = '500 10px Inter, system-ui, sans-serif';
-        cx.textAlign = 'left';
-        cx.textBaseline = 'bottom';
-        cx.fillText(txt, 28, H - 20 - i * 18);
-      });
-
+      drawHud();
       rafId = requestAnimationFrame(loop);
     }
 
