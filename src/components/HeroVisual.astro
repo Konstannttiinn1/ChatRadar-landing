@@ -170,6 +170,36 @@
     let rafId = 0;
     let isMobile = false;
 
+    const mobileConfig = {
+      messageCount: 18,
+      starMin: 32,
+      starDensity: 9000,
+      trackWidth: 0.32,
+      trackHeight: 0.19,
+      radarScale: 0.17,
+      messageScale: 0.62,
+      showLegend: false,
+      speedMin: 0.0005,
+      speedRange: 0.00028,
+    };
+
+    const desktopConfig = {
+      messageCount: 50,
+      starMin: 80,
+      starDensity: 4200,
+      trackWidth: 0.44,
+      trackHeight: 0.30,
+      radarScale: 0.24,
+      messageScale: 1,
+      showLegend: true,
+      speedMin: 0.0007,
+      speedRange: 0.0004,
+    };
+
+    function cfg() {
+      return isMobile ? mobileConfig : desktopConfig;
+    }
+
     const T = {
       bgInner:'#0f1f1a', bgOuter:'#081311',
       lead:   {fill:'rgba(80,200,135,0.16)', border:'rgba(80,200,135,0.5)', av:'rgba(80,200,135,0.32)', dot:'rgba(165,235,190,0.92)', glow:'#50c887'},
@@ -180,12 +210,14 @@
 
     const TYPES = ['lead','lead','lead','lead','lead','skip','skip','skip','neutral','neutral'];
     const stars = [];
+    const msgs = [];
 
     function eyeH(tx){ return Math.sin(tx * Math.PI) * EHH; }
 
     function makeStars() {
+      const current = cfg();
       stars.length = 0;
-      const amount = Math.max(isMobile ? 46 : 80, Math.round((W * H) / (isMobile ? 6200 : 4200)));
+      const amount = Math.max(current.starMin, Math.round((W * H) / current.starDensity));
       for (let i = 0; i < amount; i++) {
         stars.push({
           x: Math.random() * W,
@@ -201,9 +233,10 @@
     class Msg {
       constructor(){ this.reset(); this.tx = Math.random(); }
       reset(st = 0){
+        const current = cfg();
         this.tx = -0.05;
         this.lane = Math.random() * 2 - 1;
-        this.speed = 0.0007 + Math.random() * 0.0004;
+        this.speed = current.speedMin + Math.random() * current.speedRange;
         this.type = TYPES[Math.floor(Math.random() * TYPES.length)];
         this.bob = Math.random() * Math.PI * 2;
         this.bobAmp = 4 + Math.random() * 5;
@@ -219,7 +252,20 @@
       }
     }
 
-    const msgs = Array.from({ length: 50 }, () => new Msg());
+    function setMessageCount(count) {
+      if (msgs.length > count) {
+        msgs.length = count;
+        return;
+      }
+
+      while (msgs.length < count) {
+        msgs.push(new Msg());
+      }
+    }
+
+    function resetMessages() {
+      msgs.forEach((m, index) => m.reset(index % 24));
+    }
 
     function roundRect(ctx, x, y, w, h, r) {
       if (typeof ctx.roundRect === 'function') {
@@ -237,7 +283,11 @@
       const rect = wrap.getBoundingClientRect();
       W = Math.max(280, Math.floor(rect.width));
       H = Math.max(260, Math.floor(rect.height));
-      isMobile = W < 540;
+      const nextMobile = W < 540;
+      const modeChanged = nextMobile !== isMobile;
+      isMobile = nextMobile;
+      const current = cfg();
+
       dpr = Math.min(window.devicePixelRatio || 1, 2);
       cv.width = Math.floor(W * dpr);
       cv.height = Math.floor(H * dpr);
@@ -247,10 +297,13 @@
 
       CX = isMobile ? W * 0.5 : W / 2;
       CY = isMobile ? H * 0.48 : H / 2;
-      EHW = Math.min(W * (isMobile ? 0.36 : 0.44), 600);
-      EHH = Math.min(H * (isMobile ? 0.23 : 0.30), 185);
-      RR = Math.min(W, H) * (isMobile ? 0.18 : 0.24);
+      EHW = Math.min(W * current.trackWidth, 600);
+      EHH = Math.min(H * current.trackHeight, 185);
+      RR = Math.min(W, H) * current.radarScale;
       DR = RR * 1.05;
+
+      setMessageCount(current.messageCount);
+      if (modeChanged) resetMessages();
       makeStars();
     }
 
@@ -260,7 +313,7 @@
       const alpha = Math.max(0, Math.min(1, ef * 1.4));
       if (alpha <= 0.02) return;
       const c = T[m.type];
-      const scale = m.size * (0.6 + ef * 0.4) * (isMobile ? 0.72 : 1);
+      const scale = m.size * (0.6 + ef * 0.4) * cfg().messageScale;
       cx.save();
       cx.globalAlpha = alpha;
       cx.translate(x, y);
@@ -314,6 +367,7 @@
     }
 
     function drawHud(){
+      const current = cfg();
       const pad = isMobile ? 18 : 28;
       cx.fillStyle = `rgba(${T.radar},0.8)`;
       cx.font = `${isMobile ? '700 12px' : '700 13px'} Inter, system-ui, sans-serif`;
@@ -333,16 +387,18 @@
       cx.font = `${isMobile ? '600 8px' : '600 9px'} Inter, system-ui, sans-serif`;
       cx.fillText('ЛИДОВ НАЙДЕНО', W - pad, isMobile ? 48 : 62);
 
+      if (!current.showLegend) return;
+
       [
         ['rgba(80,200,135,0.8)','● релевантный лид'],
         ['rgba(225,130,95,0.75)','● нерелевантное'],
         ['rgba(100,130,135,0.5)','● нейтральное'],
       ].forEach(([col, txt], i) => {
         cx.fillStyle = col;
-        cx.font = `${isMobile ? '500 9px' : '500 10px'} Inter, system-ui, sans-serif`;
+        cx.font = '500 10px Inter, system-ui, sans-serif';
         cx.textAlign = 'left';
         cx.textBaseline = 'bottom';
-        cx.fillText(txt, pad, H - (isMobile ? 16 : 20) - i * (isMobile ? 16 : 18));
+        cx.fillText(txt, pad, H - 20 - i * 18);
       });
     }
 
@@ -426,13 +482,14 @@
 
       const p = Math.sin(frame * 0.04) * 0.25 + 0.75;
       cx.save();
-      const cg = cx.createRadialGradient(CX, CY, 0, CX, CY, isMobile ? 28 : 36);
+      const coreOuter = isMobile ? 28 : 36;
+      const cg = cx.createRadialGradient(CX, CY, 0, CX, CY, coreOuter);
       cg.addColorStop(0, `rgba(${T.core},${0.5 * p})`);
       cg.addColorStop(0.4, `rgba(${T.core},${0.2 * p})`);
       cg.addColorStop(1, `rgba(${T.core},0)`);
       cx.fillStyle = cg;
       cx.beginPath();
-      cx.arc(CX, CY, isMobile ? 28 : 36, 0, Math.PI * 2);
+      cx.arc(CX, CY, coreOuter, 0, Math.PI * 2);
       cx.fill();
       cx.shadowColor = `rgb(${T.core})`;
       cx.shadowBlur = (isMobile ? 14 : 18) * p;
