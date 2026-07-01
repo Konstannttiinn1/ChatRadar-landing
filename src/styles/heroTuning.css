@@ -1,0 +1,44 @@
+@media (min-width: 1181px) {
+  .hero {
+    min-height: 670px;
+    padding-top: 108px;
+    padding-bottom: 44px;
+  }
+
+  .hero-grid {
+    align-items: start;
+  }
+
+  .hero-visual {
+    min-height: 540px;
+  }
+
+  .pipeline {
+    margin-top: 14px;
+  }
+}
+
+@media (max-width: 760px) {
+  .hero-benefits {
+    display: block;
+    max-width: none;
+    padding: 16px 18px;
+    border: 1px solid rgba(255, 255, 255, .1);
+    border-radius: 18px;
+    background: rgba(255, 255, 255, .035);
+  }
+
+  .hero-benefits span {
+    display: block;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+  }
+
+  .hero-benefits span + span {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255, 255, 255, .08);
+  }
+}
