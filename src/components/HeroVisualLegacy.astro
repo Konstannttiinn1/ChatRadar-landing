@@ -1,7 +1,7 @@
 ---
 const { site, example } = Astro.props;
 ---
-<div class="hero-visual" aria-label="Как ChatRadar находит важные сообщения">
+<div class="hero-visual" aria-label="Как KLYXON находит важные сообщения">
   <div class="message-eye message-eye-animated" aria-hidden="true" data-chatradar-eye-wrap>
     <canvas data-chatradar-eye-canvas></canvas>
   </div>
@@ -27,7 +27,7 @@ const { site, example } = Astro.props;
 
     <article class="pipeline-card notification">
       <div class="pipeline-label"><span>3</span>Уведомление в Telegram</div>
-      <small>ChatRadar bot</small>
+      <small>KLYXON bot</small>
       <p><b>Новый релевантный запрос</b><br />{example.author} ищет решение в чате.</p>
       <a href={site.botUrl} target="_blank" rel="noreferrer">Открыть сообщение</a>
     </article>
@@ -267,7 +267,7 @@ const { site, example } = Astro.props;
       ctx.font = `${isMobile ? '700 12px' : '700 13px'} Inter, system-ui, sans-serif`;
       ctx.textAlign = 'left';
       ctx.textBaseline = 'top';
-      ctx.fillText('ChatRadar', pad, isMobile ? 20 : 26);
+      ctx.fillText('KLYXON', pad, isMobile ? 20 : 26);
       ctx.fillStyle = `rgba(${T.radar},0.32)`;
       ctx.font = `${isMobile ? '500 9px' : '500 10px'} Inter, system-ui, sans-serif`;
       ctx.fillText('сканирует поток сообщений', pad, isMobile ? 38 : 44);
