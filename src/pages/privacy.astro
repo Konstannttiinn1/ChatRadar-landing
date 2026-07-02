@@ -1,0 +1,96 @@
+---
+import '../styles/global.css';
+import '../styles/legal.css';
+import Footer from '../components/Footer.astro';
+import { site } from '../data/site';
+
+const title = 'Политика конфиденциальности';
+const updatedAt = '1 июля 2026 года';
+---
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Политика конфиденциальности KLYXON." />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://klyxon.app/privacy" />
+    <title>{title} — KLYXON</title>
+  </head>
+  <body class="legal-page">
+    <main>
+      <section class="legal-hero">
+        <div class="container">
+          <div class="legal-topline">
+            <a class="brand" href="/">
+              <span class="brand-mark"><span></span></span>
+              <span>KLYXON</span>
+            </a>
+            <a class="legal-back" href="/">← На главную</a>
+          </div>
+          <div class="legal-title">
+            <p class="section-kicker">Документы сервиса</p>
+            <h1>{title}</h1>
+            <p class="muted-on-dark">Временная редакция для MVP. Документ описывает, какие данные нужны сервису для мониторинга Telegram-чатов и отправки уведомлений.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="legal-content">
+        <div class="container">
+          <article class="legal-card">
+            <section>
+              <h2>1. Общие положения</h2>
+              <p>KLYXON — сервис мониторинга Telegram-чатов и уведомлений о потенциально релевантных сообщениях. Администратор сервиса: Claxon Service.</p>
+              <p class="legal-note">Сейчас это временная редакция документа. Реквизиты и корпоративная почта будут добавлены после утверждения финальной операционной модели сервиса.</p>
+            </section>
+
+            <section>
+              <h2>2. Какие данные могут обрабатываться</h2>
+              <p>Для работы сервиса могут использоваться:</p>
+              <ul>
+                <li>Telegram ID, username, имя профиля и данные, которые пользователь сам передаёт боту;</li>
+                <li>настройки проектов, список подключённых чатов, ключевые слова, темы и правила фильтрации;</li>
+                <li>срабатывания по сообщениям: фрагмент сообщения, ссылка на сообщение, чат, автор, категория и причина срабатывания;</li>
+                <li>технические данные, необходимые для работы сервиса, диагностики ошибок и поддержки.</li>
+              </ul>
+            </section>
+
+            <section>
+              <h2>3. Что не является целью сервиса</h2>
+              <p>KLYXON не предназначен для массового скрытого сбора данных, спама, незаконного наблюдения или нарушения прав участников чатов. Пользователь самостоятельно отвечает за то, какие чаты он подключает и с какой целью использует уведомления.</p>
+            </section>
+
+            <section>
+              <h2>4. Хранение сообщений</h2>
+              <p>Сервис не ставит целью хранить полную историю Telegram-чатов. Для работы используются срабатывания и необходимые фрагменты сообщений, которые помогают показать пользователю, почему уведомление было отправлено.</p>
+              <p>Срок хранения технических записей и срабатываний может зависеть от настроек проекта, тарифа и необходимости поддержки.</p>
+            </section>
+
+            <section>
+              <h2>5. Анализ через LLM</h2>
+              <p>Для смысловой проверки сообщений может использоваться LLM API, включая DeepSeek. Внешнему API может передаваться текст или фрагмент сообщения, необходимый для определения релевантности по правилам пользователя.</p>
+            </section>
+
+            <section>
+              <h2>6. Передача данных третьим лицам</h2>
+              <p>Мы не продаём пользовательские данные. Передача данных возможна только для обеспечения работы сервиса: хостинг, техническая инфраструктура, Telegram, LLM API и инструменты поддержки.</p>
+            </section>
+
+            <section>
+              <h2>7. Удаление данных и связь</h2>
+              <p>Пользователь может обратиться за удалением или уточнением данных через Telegram-поддержку.</p>
+              <p>Контакт поддержки: <a class="telegram-link" href={site.supportUrl} target="_blank" rel="noreferrer">Telegram</a>.</p>
+            </section>
+
+            <div class="legal-meta">
+              <span>Администратор: Claxon Service</span>
+              <span>Email: будет добавлен позднее</span>
+              <span>Дата обновления: {updatedAt}</span>
+            </div>
+          </article>
+        </div>
+      </section>
+    </main>
+    <Footer site={site} />
+  </body>
+</html>
