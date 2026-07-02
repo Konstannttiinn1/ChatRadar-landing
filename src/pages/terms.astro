@@ -1,0 +1,94 @@
+---
+import '../styles/global.css';
+import '../styles/legal.css';
+import Footer from '../components/Footer.astro';
+import { site } from '../data/site';
+
+const title = 'Пользовательское соглашение';
+const updatedAt = '1 июля 2026 года';
+---
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Пользовательское соглашение KLYXON." />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://klyxon.app/terms" />
+    <title>{title} — KLYXON</title>
+  </head>
+  <body class="legal-page">
+    <main>
+      <section class="legal-hero">
+        <div class="container">
+          <div class="legal-topline">
+            <a class="brand" href="/">
+              <span class="brand-mark"><span></span></span>
+              <span>KLYXON</span>
+            </a>
+            <a class="legal-back" href="/">← На главную</a>
+          </div>
+          <div class="legal-title">
+            <p class="section-kicker">Документы сервиса</p>
+            <h1>{title}</h1>
+            <p class="muted-on-dark">Правила использования сервиса мониторинга Telegram-чатов и уведомлений о целевых запросах.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="legal-content">
+        <div class="container">
+          <article class="legal-card">
+            <section>
+              <h2>1. О сервисе</h2>
+              <p>KLYXON помогает отслеживать выбранные Telegram-чаты, анализировать новые сообщения по заданным правилам и отправлять уведомления о потенциально релевантных запросах.</p>
+              <p>Администратор сервиса: Claxon Service.</p>
+            </section>
+
+            <section>
+              <h2>2. Условия использования</h2>
+              <p>Пользователь самостоятельно настраивает проекты, ключевые слова, темы, чаты и правила фильтрации. Пользователь подтверждает, что использует сервис добросовестно и не нарушает права третьих лиц.</p>
+            </section>
+
+            <section>
+              <h2>3. Ограничения</h2>
+              <p>Запрещается использовать KLYXON для спама, незаконного сбора данных, обхода ограничений Telegram, давления на пользователей, мошенничества или иных действий, которые могут нарушать правила площадок и законодательство.</p>
+            </section>
+
+            <section>
+              <h2>4. Точность уведомлений</h2>
+              <p>Сервис помогает находить потенциально важные сообщения, но не гарантирует обнаружение всех релевантных запросов и не гарантирует коммерческий результат. На работу могут влиять настройки пользователя, доступность Telegram, качество исходных сообщений, LLM API и техническая инфраструктура.</p>
+            </section>
+
+            <section>
+              <h2>5. Доступ и оплата</h2>
+              <p>Оплата и управление доступом могут выполняться через Telegram-бота. Тарифы, сроки доступа и доступные функции отображаются в интерфейсе бота или сообщаются поддержкой.</p>
+            </section>
+
+            <section>
+              <h2>6. Возвраты</h2>
+              <p>Запросы на возврат рассматриваются индивидуально через поддержку. При рассмотрении учитываются срок использования, технические обстоятельства и фактический объём оказанной услуги.</p>
+            </section>
+
+            <section>
+              <h2>7. Приостановка доступа</h2>
+              <p>Администратор может ограничить доступ к сервису при злоупотреблениях, попытках нарушения правил, технических атаках, некорректном использовании или угрозе стабильности сервиса.</p>
+            </section>
+
+            <section>
+              <h2>8. Поддержка</h2>
+              <p>По вопросам работы сервиса, доступа, оплаты и удаления данных можно обратиться в Telegram-поддержку.</p>
+              <p>Контакт поддержки: <a class="telegram-link" href={site.supportUrl} target="_blank" rel="noreferrer">Telegram</a>.</p>
+            </section>
+
+            <div class="legal-meta">
+              <span>Администратор: Claxon Service</span>
+              <span>Email: будет добавлен позднее</span>
+              <span>Дата обновления: {updatedAt}</span>
+            </div>
+          </article>
+        </div>
+      </section>
+    </main>
+    <Footer site={site} />
+  </body>
+</html>
