@@ -1,15 +1,54 @@
 ---
 const { site } = Astro.props;
+
+const docs = [
+  { label: 'Политика конфиденциальности', href: '/privacy' },
+  { label: 'Пользовательское соглашение', href: '/terms' },
+  { label: 'Оферта', href: '/offer' }
+];
 ---
 <footer class="footer">
-  <div class="container footer-inner">
-    <a class="brand footer-brand" href="#top">
-      <span class="brand-mark"><span></span></span>
-      <span>KLYXON</span>
-    </a>
-    <div class="footer-links">
-      {site.docs.map((doc) => <a href={doc.href}>{doc.label}</a>)}
+  <div class="container footer-inner footer-inner-filled">
+    <div class="footer-main">
+      <a class="brand footer-brand" href="#top">
+        <span class="brand-mark"><span></span></span>
+        <span>KLYXON</span>
+      </a>
+      <p>Мониторинг Telegram-чатов и уведомления о целевых запросах.</p>
+      <small>Администратор сервиса: Claxon Service · Email: будет добавлен позднее</small>
     </div>
+
+    <div class="footer-links">
+      {docs.map((doc) => <a href={doc.href}>{doc.label}</a>)}
+    </div>
+
     <a class="telegram-link" href={site.supportUrl} target="_blank" rel="noreferrer">Связаться в Telegram</a>
   </div>
 </footer>
+
+<style>
+  .footer-inner-filled {
+    align-items: flex-start;
+  }
+
+  .footer-main {
+    max-width: 360px;
+  }
+
+  .footer-main p {
+    margin: 10px 0 6px;
+    color: var(--muted);
+  }
+
+  .footer-main small {
+    display: block;
+    color: rgba(109, 116, 122, .78);
+    line-height: 1.45;
+  }
+
+  @media (max-width: 760px) {
+    .footer-inner-filled {
+      gap: 18px;
+    }
+  }
+</style>
