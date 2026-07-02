@@ -1,0 +1,95 @@
+---
+import '../styles/global.css';
+import '../styles/legal.css';
+import Footer from '../components/Footer.astro';
+import { site } from '../data/site';
+
+const title = 'Оферта';
+const updatedAt = '1 июля 2026 года';
+---
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Оферта KLYXON." />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://klyxon.app/offer" />
+    <title>{title} — KLYXON</title>
+  </head>
+  <body class="legal-page">
+    <main>
+      <section class="legal-hero">
+        <div class="container">
+          <div class="legal-topline">
+            <a class="brand" href="/">
+              <span class="brand-mark"><span></span></span>
+              <span>KLYXON</span>
+            </a>
+            <a class="legal-back" href="/">← На главную</a>
+          </div>
+          <div class="legal-title">
+            <p class="section-kicker">Документы сервиса</p>
+            <h1>{title}</h1>
+            <p class="muted-on-dark">Условия предоставления доступа к сервису KLYXON. Временная редакция для MVP.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="legal-content">
+        <div class="container">
+          <article class="legal-card">
+            <section>
+              <h2>1. Общие положения</h2>
+              <p>Настоящая оферта описывает условия предоставления доступа к сервису KLYXON. Администратор сервиса: Claxon Service.</p>
+              <p class="legal-note">Реквизиты администратора и корпоративная почта будут добавлены позднее. До этого документ используется как временная открытая редакция условий сервиса.</p>
+            </section>
+
+            <section>
+              <h2>2. Предмет услуги</h2>
+              <p>Пользователю предоставляется доступ к функциональности KLYXON: настройка проектов, подключение Telegram-чатов, фильтрация сообщений по заданным правилам, LLM-анализ и получение уведомлений о потенциально релевантных срабатываниях.</p>
+            </section>
+
+            <section>
+              <h2>3. Порядок подключения</h2>
+              <p>Подключение и управление доступом выполняются через Telegram-бота или через поддержку. Пользователь самостоятельно задаёт параметры мониторинга и отвечает за корректность выбранных источников и правил.</p>
+            </section>
+
+            <section>
+              <h2>4. Тарифы и оплата</h2>
+              <p>Актуальные тарифы, сроки доступа и доступные лимиты отображаются в Telegram-боте или сообщаются поддержкой. Оплата производится в боте доступными на момент оплаты способами.</p>
+              <p>Факт оплаты или начало использования платного доступа считается согласием с условиями этой оферты и пользовательского соглашения.</p>
+            </section>
+
+            <section>
+              <h2>5. Возвраты</h2>
+              <p>Возврат средств рассматривается индивидуально по обращению пользователя в поддержку. Решение зависит от срока использования, технических причин обращения, фактического предоставления доступа и иных обстоятельств.</p>
+            </section>
+
+            <section>
+              <h2>6. Ограничения услуги</h2>
+              <p>KLYXON не гарантирует нахождение всех сообщений, получение заявок, продаж или коммерческого результата. Сервис предоставляет технический инструмент мониторинга и уведомлений, качество которого зависит от настроек, доступности Telegram, LLM API и инфраструктуры.</p>
+            </section>
+
+            <section>
+              <h2>7. Технические работы</h2>
+              <p>Сервис может временно быть недоступен из-за обновлений, технических работ, ограничений Telegram, проблем хостинга или внешних API. По возможности администратор старается минимизировать такие периоды.</p>
+            </section>
+
+            <section>
+              <h2>8. Связь</h2>
+              <p>Все вопросы по оплате, доступу, возвратам и настройке сервиса направляются в Telegram-поддержку.</p>
+              <p>Контакт поддержки: <a class="telegram-link" href={site.supportUrl} target="_blank" rel="noreferrer">Telegram</a>.</p>
+            </section>
+
+            <div class="legal-meta">
+              <span>Администратор: Claxon Service</span>
+              <span>Email: будет добавлен позднее</span>
+              <span>Дата обновления: {updatedAt}</span>
+            </div>
+          </article>
+        </div>
+      </section>
+    </main>
+    <Footer site={site} />
+  </body>
+</html>
