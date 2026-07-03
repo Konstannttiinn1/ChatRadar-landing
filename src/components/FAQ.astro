@@ -6,6 +6,7 @@ const { faq } = Astro.props;
     <div class="section-head">
       <p class="section-kicker">FAQ</p>
       <h2>Вопросы и ответы</h2>
+      <p class="muted trust-note">KLYXON не предназначен для спама и скрытого массового сбора данных. Сервис работает с чатами, к которым у пользователя есть доступ, и помогает находить релевантные сообщения по заданным правилам.</p>
     </div>
     <div class="faq-grid">
       {faq.map((item) => (
@@ -17,3 +18,11 @@ const { faq } = Astro.props;
     </div>
   </div>
 </section>
+
+<style>
+  .trust-note {
+    max-width: 760px;
+    margin: 14px auto 0;
+    font-size: 15px;
+  }
+</style>
