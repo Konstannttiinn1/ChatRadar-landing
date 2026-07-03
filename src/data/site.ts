@@ -1,10 +1,9 @@
 export const site = {
-  name: 'ChatRadar',
+  name: 'KLYXON',
   description:
-    'Telegram-бот, который отслеживает выбранные чаты в реальном времени и присылает уведомления о целевых запросах клиентов.',
-  botUrl: 'https://t.me/AItestKL_bot',
+    'KLYXON — сервис мониторинга Telegram-чатов: отслеживает выбранные группы, находит целевые запросы клиентов по ключевым словам и смыслу, отправляет уведомления в Telegram.',
+  botUrl: 'https://t.me/Klyxon_bot',
   supportUrl: 'https://t.me/L_Konstantinn',
-  email: '',
   nav: [
     { label: 'Как это работает', href: '#how-it-works' },
     { label: 'Возможности', href: '#features' },
@@ -13,8 +12,8 @@ export const site = {
     { label: 'FAQ', href: '#faq' }
   ],
   docs: [
-    { label: 'Политика конфиденциальности', href: '#' },
-    { label: 'Пользовательское соглашение', href: '#' },
-    { label: 'Оферта', href: '#' }
+    { label: 'Политика конфиденциальности', href: '/privacy/' },
+    { label: 'Пользовательское соглашение', href: '/terms/' },
+    { label: 'Оферта', href: '/offer/' }
   ]
 };
