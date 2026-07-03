@@ -1,6 +1,6 @@
-# ChatRadar Landing
+# KLYXON Landing
 
-Одностраничный сайт-витрина для Telegram-бота ChatRadar.
+Одностраничный сайт-витрина для Telegram-бота KLYXON.
 
 ## Запуск локально
 
