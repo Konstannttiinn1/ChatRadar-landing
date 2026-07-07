@@ -1,20 +1,21 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="KLYXON">
   <defs>
-    <radialGradient id="bg" cx="35%" cy="20%" r="85%">
-      <stop offset="0" stop-color="#1e4a3e"/>
-      <stop offset="0.55" stop-color="#12382f"/>
-      <stop offset="1" stop-color="#08241f"/>
+    <radialGradient id="paper" cx="35%" cy="22%" r="90%">
+      <stop offset="0" stop-color="#fff8e7"/>
+      <stop offset="0.7" stop-color="#efe9d6"/>
+      <stop offset="1" stop-color="#ded7c2"/>
     </radialGradient>
-    <linearGradient id="cream" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#fff9e9"/>
-      <stop offset="1" stop-color="#f3ead5"/>
+    <linearGradient id="green" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#244c42"/>
+      <stop offset="1" stop-color="#102f28"/>
     </linearGradient>
     <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#dca13a"/>
       <stop offset="1" stop-color="#b77a20"/>
     </linearGradient>
   </defs>
-  <rect width="512" height="512" rx="92" fill="url(#bg)"/>
-  <path fill="url(#cream)" d="M144 116h72v280h-72zM215 254 334 116h86L302 250l126 146h-90z"/>
-  <circle cx="386" cy="118" r="27" fill="url(#gold)"/>
+  <rect width="512" height="512" rx="92" fill="url(#paper)"/>
+  <circle cx="256" cy="256" r="206" fill="none" stroke="url(#green)" stroke-width="22"/>
+  <path fill="url(#green)" d="M151 124h70v264h-70zM220 254 333 124h84L304 251l119 137h-88z"/>
+  <circle cx="385" cy="127" r="26" fill="url(#gold)"/>
 </svg>
