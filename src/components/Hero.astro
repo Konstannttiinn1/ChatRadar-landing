@@ -24,26 +24,36 @@ const { site, example } = Astro.props;
         <span><b>Уведомления</b> приходят в Telegram</span>
         <span><b>Контроль:</b> только выбранные чаты и темы</span>
       </div>
-
-      <aside class="hero-alert-preview" aria-label="Пример уведомления в Telegram">
-        <div class="hero-alert-topline">
-          <span class="hero-alert-badge">ALERT</span>
-          <span>Пример уведомления в Telegram</span>
-        </div>
-        <div class="hero-alert-meta">
-          <span><b>Ключ:</b> автозапчасти</span>
-          <span><b>Источник:</b> Toyota Club SPB</span>
-        </div>
-        <p class="hero-alert-message">
-          Подскажите, где купить передние тормозные колодки на Camry? Нужен проверенный магазин или поставщик.
-        </p>
-        <div class="hero-alert-decision">
-          <span>Решение: <b>ALERT · 0.94</b></span>
-          <small>Пользователь ищет товар и поставщика — стоит быстро ответить.</small>
-        </div>
-      </aside>
     </div>
 
     <HeroVisual site={site} example={example} />
+
+    <aside class="hero-alert-preview" aria-label="Примеры уведомлений в Telegram">
+      <div class="hero-alert-head">
+        <span>Примеры уведомлений</span>
+        <small>LLM отделяет целевое от шума</small>
+      </div>
+
+      <article class="hero-alert-card hero-alert-card-good">
+        <span class="hero-alert-badge">ALERT · 0.94</span>
+        <b>Купить запчасти</b>
+        <p>Где взять передние колодки на Camry? Нужен проверенный поставщик.</p>
+        <small>Целевой запрос: пользователь ищет товар.</small>
+      </article>
+
+      <article class="hero-alert-card hero-alert-card-warn">
+        <span class="hero-alert-badge">REVIEW · 0.52</span>
+        <b>Нужна рекомендация</b>
+        <p>Кто недавно менял масло в районе? Интересует нормальный сервис.</p>
+        <small>Сомнительно: можно проверить вручную.</small>
+      </article>
+
+      <article class="hero-alert-card hero-alert-card-drop">
+        <span class="hero-alert-badge">DROP · 0.08</span>
+        <b>Просто обсуждение</b>
+        <p>Опять спорят, какие колодки лучше, без запроса на покупку.</p>
+        <small>Не лид: нет намерения купить или заказать.</small>
+      </article>
+    </aside>
   </div>
 </section>
