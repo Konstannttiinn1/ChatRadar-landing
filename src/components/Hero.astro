@@ -28,23 +28,31 @@ const { site, example } = Astro.props;
 
     <HeroVisual site={site} example={example} />
 
-    <aside class="hero-alert-tourism" aria-label="Пример уведомления по туризму">
+    <aside class="hero-alert-tourism" aria-label="Примеры уведомлений по туризму">
       <div class="hero-alert-head">
-        <span>Пример уведомления</span>
-        <small>сценарий: туризм</small>
+        <span>Примеры уведомлений</span>
+        <small>LLM отделяет целевое от шума</small>
       </div>
 
-      <article class="hero-alert-case hero-alert-card-good">
-        <div class="hero-alert-case-main">
-          <span class="hero-alert-badge">ALERT · 0.91</span>
-          <b>Организация поездки</b>
-          <p>Ищу человека или агентство, кто поможет организовать поездку в Стамбул на неделю: перелёт, жильё и маршрут.</p>
-        </div>
-        <div class="hero-alert-case-side">
-          <span><b>Ключ:</b> туризм</span>
-          <span><b>Источник:</b> Travel Chat SPB</span>
-          <small>Целевой запрос: пользователь ищет помощь в подборе и организации путешествия.</small>
-        </div>
+      <article class="hero-alert-card hero-alert-card-good">
+        <span class="hero-alert-badge">ЦЕЛЕВОЙ · 0.91</span>
+        <b>Организовать поездку</b>
+        <p>Кто поможет собрать тур в Стамбул: перелёт, жильё и маршрут?</p>
+        <small>Ищет услугу: стоит быстро ответить.</small>
+      </article>
+
+      <article class="hero-alert-card hero-alert-card-warn">
+        <span class="hero-alert-badge">ПРОВЕРИТЬ · 0.55</span>
+        <b>Нужна рекомендация</b>
+        <p>Кто летал в августе? Где лучше остановиться и что посмотреть?</p>
+        <small>Есть интерес, но нет явного заказа.</small>
+      </article>
+
+      <article class="hero-alert-card hero-alert-card-drop">
+        <span class="hero-alert-badge">ШУМ · 0.07</span>
+        <b>Просто обсуждение</b>
+        <p>Делятся впечатлениями о поездке без запроса на подбор тура.</p>
+        <small>Не лид: нет намерения купить услугу.</small>
       </article>
     </aside>
 
@@ -55,21 +63,21 @@ const { site, example } = Astro.props;
       </div>
 
       <article class="hero-alert-card hero-alert-card-good">
-        <span class="hero-alert-badge">ALERT · 0.94</span>
+        <span class="hero-alert-badge">ЦЕЛЕВОЙ · 0.94</span>
         <b>Купить запчасти</b>
         <p>Где взять передние колодки на Camry? Нужен проверенный поставщик.</p>
         <small>Целевой запрос: пользователь ищет товар.</small>
       </article>
 
       <article class="hero-alert-card hero-alert-card-warn">
-        <span class="hero-alert-badge">REVIEW · 0.52</span>
+        <span class="hero-alert-badge">ПРОВЕРИТЬ · 0.52</span>
         <b>Нужна рекомендация</b>
         <p>Кто недавно менял масло в районе? Интересует нормальный сервис.</p>
         <small>Сомнительно: можно проверить вручную.</small>
       </article>
 
       <article class="hero-alert-card hero-alert-card-drop">
-        <span class="hero-alert-badge">DROP · 0.08</span>
+        <span class="hero-alert-badge">ШУМ · 0.08</span>
         <b>Просто обсуждение</b>
         <p>Опять спорят, какие колодки лучше, без запроса на покупку.</p>
         <small>Не лид: нет намерения купить или заказать.</small>
