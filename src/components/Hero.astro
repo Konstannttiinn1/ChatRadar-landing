@@ -24,6 +24,24 @@ const { site, example } = Astro.props;
         <span><b>Уведомления</b> приходят в Telegram</span>
         <span><b>Контроль:</b> только выбранные чаты и темы</span>
       </div>
+
+      <aside class="hero-alert-preview" aria-label="Пример уведомления в Telegram">
+        <div class="hero-alert-topline">
+          <span class="hero-alert-badge">ALERT</span>
+          <span>Пример уведомления в Telegram</span>
+        </div>
+        <div class="hero-alert-meta">
+          <span><b>Ключ:</b> автозапчасти</span>
+          <span><b>Источник:</b> Toyota Club SPB</span>
+        </div>
+        <p class="hero-alert-message">
+          Подскажите, где купить передние тормозные колодки на Camry? Нужен проверенный магазин или поставщик.
+        </p>
+        <div class="hero-alert-decision">
+          <span>Решение: <b>ALERT · 0.94</b></span>
+          <small>Пользователь ищет товар и поставщика — стоит быстро ответить.</small>
+        </div>
+      </aside>
     </div>
 
     <HeroVisual site={site} example={example} />
