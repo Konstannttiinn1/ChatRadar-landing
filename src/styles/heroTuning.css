@@ -54,30 +54,25 @@
 
   .hero-alert-preview,
   .hero-alert-tourism {
+    display: grid;
     grid-column: 2;
     grid-row: 1;
+    align-self: end;
     justify-self: stretch;
     z-index: 2;
-    padding: 14px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 9px;
+    margin: 0;
+    padding: 12px;
     border: 1px solid rgba(255, 255, 255, .08);
-    border-radius: 22px;
+    border-radius: 20px;
     background: linear-gradient(135deg, rgba(255, 255, 255, .035), rgba(112, 198, 173, .045));
     box-shadow: 0 24px 80px rgba(0, 0, 0, .18);
     backdrop-filter: blur(10px);
   }
 
   .hero-alert-tourism {
-    display: grid;
-    align-self: end;
-    margin-bottom: 220px;
-  }
-
-  .hero-alert-preview {
-    display: grid;
-    align-self: end;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 10px;
-    margin: 0;
+    margin-bottom: 170px;
   }
 
   .hero-alert-head {
@@ -86,7 +81,7 @@
     align-items: end;
     justify-content: space-between;
     gap: 16px;
-    margin-bottom: 2px;
+    margin-bottom: 0;
     color: #fff;
     font-weight: 900;
     font-size: 14px;
@@ -98,79 +93,45 @@
     font-weight: 700;
   }
 
-  .hero-alert-card,
-  .hero-alert-case {
+  .hero-alert-card {
+    min-height: 102px;
+    padding: 11px 12px 10px;
     border: 1px solid rgba(255, 255, 255, .08);
-    border-radius: 17px;
+    border-radius: 16px;
     background: rgba(8, 18, 22, .58);
   }
 
-  .hero-alert-card {
-    min-height: 138px;
-    padding: 13px 13px 12px;
-  }
-
-  .hero-alert-case {
-    display: grid;
-    grid-template-columns: 1.25fr .75fr;
-    gap: 14px;
-    padding: 14px;
-  }
-
-  .hero-alert-case-main {
-    min-width: 0;
-  }
-
-  .hero-alert-case-side {
-    display: grid;
-    align-content: start;
-    gap: 7px;
-    min-width: 0;
-    padding-left: 14px;
-    border-left: 1px solid rgba(255, 255, 255, .08);
-    color: rgba(255, 255, 255, .7);
-    font-size: 12px;
-    line-height: 1.35;
-  }
-
-  .hero-alert-case-side b {
-    color: #fff;
-  }
-
-  .hero-alert-card b,
-  .hero-alert-case b {
+  .hero-alert-card b {
     display: block;
-    margin-top: 9px;
+    margin-top: 7px;
     color: #fff;
-    font-size: 13px;
-    line-height: 1.2;
+    font-size: 12px;
+    line-height: 1.18;
   }
 
-  .hero-alert-card p,
-  .hero-alert-case p {
-    margin: 7px 0 0;
+  .hero-alert-card p {
+    margin: 6px 0 0;
     color: rgba(255, 255, 255, .76);
-    font-size: 12px;
-    line-height: 1.38;
+    font-size: 11px;
+    line-height: 1.32;
   }
 
-  .hero-alert-card small,
-  .hero-alert-case small {
+  .hero-alert-card small {
     display: block;
-    margin-top: 9px;
+    margin-top: 7px;
     color: rgba(255, 255, 255, .46);
-    font-size: 11px;
-    line-height: 1.28;
+    font-size: 10px;
+    line-height: 1.22;
   }
 
   .hero-alert-badge {
     display: inline-flex;
     align-items: center;
-    min-height: 24px;
-    padding: 0 9px;
+    min-height: 22px;
+    padding: 0 8px;
     border-radius: 999px;
-    letter-spacing: .05em;
-    font-size: 10px;
+    letter-spacing: .04em;
+    font-size: 9px;
     font-weight: 900;
   }
 
