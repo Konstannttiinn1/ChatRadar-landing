@@ -28,6 +28,26 @@ const { site, example } = Astro.props;
 
     <HeroVisual site={site} example={example} />
 
+    <aside class="hero-alert-tourism" aria-label="Пример уведомления по туризму">
+      <div class="hero-alert-head">
+        <span>Пример уведомления</span>
+        <small>сценарий: туризм</small>
+      </div>
+
+      <article class="hero-alert-case hero-alert-card-good">
+        <div class="hero-alert-case-main">
+          <span class="hero-alert-badge">ALERT · 0.91</span>
+          <b>Организация поездки</b>
+          <p>Ищу человека или агентство, кто поможет организовать поездку в Стамбул на неделю: перелёт, жильё и маршрут.</p>
+        </div>
+        <div class="hero-alert-case-side">
+          <span><b>Ключ:</b> туризм</span>
+          <span><b>Источник:</b> Travel Chat SPB</span>
+          <small>Целевой запрос: пользователь ищет помощь в подборе и организации путешествия.</small>
+        </div>
+      </article>
+    </aside>
+
     <aside class="hero-alert-preview" aria-label="Примеры уведомлений в Telegram">
       <div class="hero-alert-head">
         <span>Примеры уведомлений</span>
