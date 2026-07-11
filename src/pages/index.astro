@@ -14,6 +14,7 @@ import FAQ from '../components/FAQ.astro';
 import CTA from '../components/CTA.astro';
 import Footer from '../components/Footer.astro';
 import FloatingContact from '../components/FloatingContact.astro';
+import SeoSchema from '../components/SeoSchema.astro';
 import { site } from '../data/site';
 import { examples } from '../data/examples';
 import { useCases } from '../data/useCases';
@@ -30,6 +31,9 @@ const pageTitle = 'KLYXON — мониторинг Telegram-чатов в реа
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={site.description} />
     <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#0a1615" />
+    <meta name="application-name" content="KLYXON" />
+    <meta name="apple-mobile-web-app-title" content="KLYXON" />
     <link rel="canonical" href={canonicalUrl} />
     <link rel="icon" href="/favicon.svg?v=5" type="image/svg+xml" />
 
@@ -43,6 +47,8 @@ const pageTitle = 'KLYXON — мониторинг Telegram-чатов в реа
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" content={pageTitle} />
     <meta name="twitter:description" content={site.description} />
+
+    <SeoSchema site={site} faq={faq} />
 
     <title>{pageTitle}</title>
   </head>
