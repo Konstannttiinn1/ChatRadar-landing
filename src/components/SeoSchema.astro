@@ -1,0 +1,67 @@
+---
+const { site, faq = [] } = Astro.props;
+
+const baseUrl = 'https://klyxon.app';
+const pageUrl = `${baseUrl}/`;
+const logoUrl = `${baseUrl}/favicon.svg`;
+const description = site.description;
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Organization',
+      '@id': `${pageUrl}#organization`,
+      name: 'KLYXON',
+      url: pageUrl,
+      logo: {
+        '@type': 'ImageObject',
+        url: logoUrl
+      },
+      sameAs: [site.botUrl, site.supportUrl]
+    },
+    {
+      '@type': 'WebSite',
+      '@id': `${pageUrl}#website`,
+      name: 'KLYXON',
+      url: pageUrl,
+      description,
+      publisher: {
+        '@id': `${pageUrl}#organization`
+      },
+      inLanguage: 'ru-RU'
+    },
+    {
+      '@type': 'SoftwareApplication',
+      '@id': `${pageUrl}#software`,
+      name: 'KLYXON',
+      applicationCategory: 'BusinessApplication',
+      operatingSystem: 'Web, Telegram',
+      url: pageUrl,
+      description,
+      publisher: {
+        '@id': `${pageUrl}#organization`
+      },
+      offers: {
+        '@type': 'Offer',
+        priceCurrency: 'RUB',
+        availability: 'https://schema.org/InStock',
+        url: pageUrl
+      }
+    },
+    {
+      '@type': 'FAQPage',
+      '@id': `${pageUrl}#faq`,
+      mainEntity: faq.map((item) => ({
+        '@type': 'Question',
+        name: item.question,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: item.answer
+        }
+      }))
+    }
+  ]
+};
+---
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />
