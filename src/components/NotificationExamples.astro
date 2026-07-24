@@ -1,0 +1,98 @@
+---
+const alerts = [
+  {
+    tenant: 'tg_809114520',
+    keyword: 'дизайнер',
+    source: 'IT и фриланс СПБ',
+    sourceId: '-1001884205532',
+    tag: 'фриланс',
+    author: 'Алина',
+    username: '@alina_px',
+    message: 'Нужен дизайнер для лендинга, можно с кейсами в личку.',
+    link: 'https://t.me/c/1884205532/5160',
+    score: '0.95',
+    reason: 'прямой запрос на дизайн-услугу.'
+  },
+  {
+    tenant: 'tg_801245771',
+    keyword: 'логистика',
+    source: 'Чат района Южный',
+    sourceId: '-1001745023101',
+    tag: 'локальный спрос',
+    author: 'Сергей',
+    username: '@ser321_spb',
+    message: 'Кто может помочь с перевозкой мебели из Южного района в центр в субботу?',
+    link: 'https://t.me/c/1745023101/8421',
+    score: '0.93',
+    reason: 'нужен исполнитель для логистической услуги в локальном чате.'
+  },
+  {
+    tenant: 'tg_804510633',
+    keyword: 'разработчик',
+    source: 'Стартапы и продукт',
+    sourceId: '-1001912077344',
+    tag: 'tech',
+    author: 'Игорь',
+    username: '@igor_devteam',
+    message: 'Ищем frontend-разработчика на небольшой проект, старт на следующей неделе.',
+    link: 'https://t.me/c/1912077344/7312',
+    score: '0.91',
+    reason: 'конкретный запрос на подрядчика в IT-направлении.'
+  },
+  {
+    tenant: 'tg_805337914',
+    keyword: 'закупка',
+    source: 'Продажи и поставщики',
+    sourceId: '-1001632074418',
+    tag: 'b2b',
+    author: 'Марина',
+    username: '@mar_salespro',
+    message: 'Ищем поставщика упаковки для небольшого интернет-магазина.',
+    link: 'https://t.me/c/1632074418/2904',
+    score: '0.89',
+    reason: 'запрос на поставщика и потенциальный коммерческий контакт.'
+  }
+];
+---
+<section class="section section-light notification-examples" id="notification-examples">
+  <div class="container notification-examples-shell">
+    <div class="notification-examples-head">
+      <p class="section-kicker">Примеры уведомлений</p>
+      <h2>Как выглядят уведомления</h2>
+      <p>После фильтрации вы получаете структурированные уведомления в Telegram — с ключевыми деталями и прямыми ссылками.</p>
+    </div>
+
+    <div class="notification-card-grid">
+      {alerts.map((alert) => (
+        <article class="telegram-alert-card">
+          <div class="telegram-alert-top">
+            <div>
+              <strong>Klyxon</strong>
+              <span>🚨 ALERT</span>
+            </div>
+            <small>админ</small>
+          </div>
+
+          <div class="telegram-alert-copy">
+            <p>Tenant: {alert.tenant}<br />Ключевое слово: {alert.keyword}</p>
+
+            <p><b>📌 Источник:</b><br />Название: {alert.source}<br />ID: {alert.sourceId}<br />Ссылка на чат: нет ссылки<br />Метка: {alert.tag}</p>
+
+            <p><b>👤 Автор:</b> {alert.author}<br />Telegram: {alert.username}</p>
+
+            <p><b>💬 Сообщение:</b><br />{alert.message}</p>
+
+            <p><b>🔗 Ссылка на сообщение:</b><br /><span class="telegram-alert-link">{alert.link}</span></p>
+
+            <p><b>🤖 Решение:</b><br />Статус: Важное<br />Оценка: {alert.score}<br />Причина: {alert.reason}</p>
+          </div>
+
+          <div class="telegram-alert-actions">
+            <span>👍 Полезно</span>
+            <span>👎 Не подходит</span>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
