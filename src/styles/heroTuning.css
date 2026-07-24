@@ -71,9 +71,9 @@
     backdrop-filter: blur(10px);
   }
 
-  .hero-alert-tourism {
-    margin-bottom: 186px;
-  }
+  .hero-alert-row-one { margin-bottom: 0; }
+  .hero-alert-row-two { margin-bottom: 174px; }
+  .hero-alert-row-three { margin-bottom: 348px; }
 
   .hero-alert-head {
     grid-column: 1 / -1;
