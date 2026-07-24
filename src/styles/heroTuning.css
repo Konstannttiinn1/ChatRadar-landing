@@ -28,7 +28,7 @@
 
 @media (min-width: 1181px) {
   .hero {
-    min-height: 670px;
+    min-height: 840px;
     padding-top: 108px;
     padding-bottom: 44px;
   }
@@ -45,11 +45,7 @@
   .hero-visual {
     grid-column: 2;
     grid-row: 1;
-    min-height: 540px;
-  }
-
-  .pipeline {
-    margin-top: 14px;
+    min-height: 700px;
   }
 
   .hero-alert-preview,
@@ -61,19 +57,19 @@
     justify-self: stretch;
     z-index: 2;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 9px;
+    gap: 10px;
     margin: 0;
-    padding: 12px;
-    border: 1px solid rgba(255, 255, 255, .08);
+    padding: 13px;
+    border: 1px solid rgba(185, 226, 216, .22);
     border-radius: 20px;
-    background: linear-gradient(135deg, rgba(255, 255, 255, .035), rgba(112, 198, 173, .045));
-    box-shadow: 0 24px 80px rgba(0, 0, 0, .18);
+    background: linear-gradient(135deg, rgba(255,255,255,.055), rgba(112,198,173,.07));
+    box-shadow: 0 20px 55px rgba(0,0,0,.24), inset 0 0 0 1px rgba(255,255,255,.025);
     backdrop-filter: blur(10px);
   }
 
   .hero-alert-row-one { margin-bottom: 0; }
-  .hero-alert-row-two { margin-bottom: 174px; }
-  .hero-alert-row-three { margin-bottom: 348px; }
+  .hero-alert-row-two { margin-bottom: 190px; }
+  .hero-alert-row-three { margin-bottom: 380px; }
 
   .hero-alert-head {
     grid-column: 1 / -1;
@@ -88,17 +84,18 @@
   }
 
   .hero-alert-head small {
-    color: rgba(255, 255, 255, .46);
+    color: rgba(255, 255, 255, .5);
     font-size: 12px;
     font-weight: 700;
   }
 
   .hero-alert-card {
-    min-height: 102px;
+    min-height: 112px;
     padding: 11px 12px 10px;
-    border: 1px solid rgba(255, 255, 255, .08);
+    border: 1px solid rgba(210, 239, 232, .14);
     border-radius: 16px;
-    background: rgba(8, 18, 22, .58);
+    background: rgba(6, 16, 21, .72);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.025);
   }
 
   .hero-alert-card b {
@@ -111,7 +108,7 @@
 
   .hero-alert-card p {
     margin: 6px 0 0;
-    color: rgba(255, 255, 255, .76);
+    color: rgba(255, 255, 255, .78);
     font-size: 11px;
     line-height: 1.32;
   }
@@ -119,7 +116,7 @@
   .hero-alert-card small {
     display: block;
     margin-top: 7px;
-    color: rgba(255, 255, 255, .46);
+    color: rgba(255, 255, 255, .5);
     font-size: 10px;
     line-height: 1.22;
   }
