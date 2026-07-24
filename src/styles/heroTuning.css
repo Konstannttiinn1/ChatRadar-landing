@@ -28,7 +28,7 @@
 
 @media (min-width: 1181px) {
   .hero {
-    min-height: 930px;
+    min-height: 970px;
     padding-top: 108px;
     padding-bottom: 44px;
   }
@@ -45,7 +45,7 @@
   .hero-visual {
     grid-column: 2;
     grid-row: 1;
-    min-height: 800px;
+    min-height: 840px;
   }
 
   .hero-alert-preview,
@@ -68,8 +68,8 @@
   }
 
   .hero-alert-row-one { margin-bottom: 0; }
-  .hero-alert-row-two { margin-bottom: 145px; }
-  .hero-alert-row-three { margin-bottom: 290px; }
+  .hero-alert-row-two { margin-bottom: 165px; }
+  .hero-alert-row-three { margin-bottom: 330px; }
 
   .hero-alert-head {
     grid-column: 1 / -1;
