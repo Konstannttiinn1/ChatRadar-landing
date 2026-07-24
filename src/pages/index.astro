@@ -2,12 +2,14 @@
 import '../styles/global.css';
 import '../styles/heroTuning.css';
 import '../styles/chatQuality.css';
+import '../styles/notificationExamples.css';
 import Header from '../components/Header.astro';
 import Hero from '../components/Hero.astro';
 import HowItWorks from '../components/HowItWorks.astro';
 import UseCases from '../components/UseCases.astro';
 import Features from '../components/Features.astro';
 import ChatQuality from '../components/ChatQuality.astro';
+import NotificationExamples from '../components/NotificationExamples.astro';
 import VideoBlock from '../components/VideoBlock.astro';
 import Pricing from '../components/Pricing.astro';
 import FAQ from '../components/FAQ.astro';
@@ -62,6 +64,7 @@ const pageTitle = 'KLYXON — мониторинг Telegram-чатов в реа
       <Features features={features} />
       <ChatQuality site={site} />
       <UseCases useCases={useCases} />
+      <NotificationExamples />
       <VideoBlock site={site} />
       <Pricing pricing={pricing} site={site} />
       <FAQ faq={faq} />
