@@ -6,9 +6,7 @@ export const site = {
   supportUrl: 'https://t.me/L_Konstantinn',
   nav: [
     { label: 'Как начать', href: '#how-it-works' },
-    { label: 'Технология', href: '#features' },
     { label: 'Оценка чатов', href: '#chat-quality' },
-    { label: 'Сценарии', href: '#use-cases' },
     { label: 'Тарифы', href: '#pricing' },
     { label: 'FAQ', href: '#faq' }
   ],
