@@ -9,7 +9,7 @@ const alerts = [
     author: 'Алина',
     username: '@alina_px',
     message: 'Нужен дизайнер для лендинга, можно с кейсами в личку.',
-    link: 'https://t.me/c/1884205532/5160',
+    link: 'https://t.me/Klyxon_bot?start=demo_design_5160',
     score: '0.95',
     reason: 'прямой запрос на дизайн-услугу.'
   },
@@ -22,9 +22,9 @@ const alerts = [
     author: 'Сергей',
     username: '@ser321_spb',
     message: 'Кто может помочь с перевозкой мебели из Южного района в центр в субботу?',
-    link: 'https://t.me/c/1745023101/8421',
+    link: 'https://t.me/Klyxon_bot?start=demo_logistics_8421',
     score: '0.93',
-    reason: 'нужен исполнитель для логистической услуги в локальном чате.'
+    reason: 'нужен исполнитель для логистической услуги.'
   },
   {
     tenant: 'tg_804510633',
@@ -35,9 +35,9 @@ const alerts = [
     author: 'Игорь',
     username: '@igor_devteam',
     message: 'Ищем frontend-разработчика на небольшой проект, старт на следующей неделе.',
-    link: 'https://t.me/c/1912077344/7312',
+    link: 'https://t.me/Klyxon_bot?start=demo_dev_7312',
     score: '0.91',
-    reason: 'конкретный запрос на подрядчика в IT-направлении.'
+    reason: 'конкретный запрос на подрядчика в IT.'
   },
   {
     tenant: 'tg_805337914',
@@ -48,9 +48,9 @@ const alerts = [
     author: 'Марина',
     username: '@mar_salespro',
     message: 'Ищем поставщика упаковки для небольшого интернет-магазина.',
-    link: 'https://t.me/c/1632074418/2904',
+    link: 'https://t.me/Klyxon_bot?start=demo_supply_2904',
     score: '0.89',
-    reason: 'запрос на поставщика и потенциальный коммерческий контакт.'
+    reason: 'запрос на поставщика и коммерческий контакт.'
   }
 ];
 ---
@@ -74,17 +74,17 @@ const alerts = [
           </div>
 
           <div class="telegram-alert-copy">
-            <p>Tenant: {alert.tenant}<br />Ключевое слово: {alert.keyword}</p>
+            <p class="alert-meta">Tenant: {alert.tenant}<br />Ключевое слово: {alert.keyword}</p>
 
-            <p><b>📌 Источник:</b><br />Название: {alert.source}<br />ID: {alert.sourceId}<br />Ссылка на чат: нет ссылки<br />Метка: {alert.tag}</p>
+            <p class="alert-source"><b>📌 Источник:</b><br />Название: {alert.source}<br />ID: {alert.sourceId}<br />Метка: {alert.tag}</p>
 
-            <p><b>👤 Автор:</b> {alert.author}<br />Telegram: {alert.username}</p>
+            <p class="alert-author"><b>👤 Автор:</b> {alert.author}<br />Telegram: {alert.username}</p>
 
-            <p><b>💬 Сообщение:</b><br />{alert.message}</p>
+            <p class="alert-message"><b>💬 Сообщение:</b><br />{alert.message}</p>
 
-            <p><b>🔗 Ссылка на сообщение:</b><br /><span class="telegram-alert-link">{alert.link}</span></p>
+            <p class="alert-link-row"><b>🔗 Ссылка на сообщение:</b><br /><a class="telegram-alert-link" href={alert.link} target="_blank" rel="noreferrer">Открыть сообщение</a></p>
 
-            <p><b>🤖 Решение:</b><br />Статус: Важное<br />Оценка: {alert.score}<br />Причина: {alert.reason}</p>
+            <p class="alert-decision"><b>🤖 Решение:</b><br />Статус: Важное<br />Оценка: {alert.score}<br />Причина: {alert.reason}</p>
           </div>
 
           <div class="telegram-alert-actions">
