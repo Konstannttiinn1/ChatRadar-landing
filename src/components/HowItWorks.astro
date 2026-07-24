@@ -1,26 +1,228 @@
 ---
 const steps = [
-  ['Подключаете чаты', 'Добавьте Telegram-чаты, где могут появляться клиенты, заявки, жалобы или важные запросы.'],
-  ['Задаёте, что искать', 'Опишите ключевые слова, темы и правила: какие сообщения считать целевыми именно для вас.'],
-  ['KLYXON следит в реальном времени', 'Новые сообщения сразу проходят первичный фильтр и проверку по смыслу через LLM.'],
-  ['Получаете уведомление', 'Когда появляется подходящий запрос, бот присылает его в Telegram с чатом, автором, ссылкой и причиной срабатывания.'],
-  ['Реагируете быстрее', 'Вы отвечаете человеку, пока запрос ещё горячий, а не находите его через поиск спустя несколько часов.']
+  {
+    title: 'Выбираете источники',
+    text: 'Подключаете рабочие, отраслевые и тематические Telegram-чаты, в которых обсуждаются нужные вам задачи.'
+  },
+  {
+    title: 'Описываете бизнес-сигнал',
+    text: 'Указываете обычным языком, какие запросы, потребности и ситуации считать целевыми, а что игнорировать.'
+  },
+  {
+    title: 'Получаете уведомления',
+    text: 'KLYXON проверяет новые сообщения и отправляет в Telegram автора, ссылку, категорию и объяснение срабатывания.'
+  }
 ];
 ---
-<section class="section section-light" id="how-it-works">
+<section class="section section-light how-section" id="how-it-works">
   <div class="container">
-    <div class="section-head">
-      <p class="section-kicker">Как это работает</p>
-      <h2>От нового сообщения в чате до уведомления в Telegram</h2>
+    <div class="section-head how-head">
+      <p class="section-kicker">Как начать</p>
+      <h2>Три шага до первого релевантного сигнала</h2>
+      <p class="muted">Настройка не требует сложных фильтров: достаточно выбрать источники и описать задачу обычным языком.</p>
     </div>
-    <div class="steps">
-      {steps.map(([title, text], index) => (
-        <article class="step-card">
-          <span>{index + 1}</span>
-          <h3>{title}</h3>
-          <p>{text}</p>
+
+    <div class="how-grid">
+      <div class="how-steps">
+        {steps.map((step, index) => (
+          <article class="how-step">
+            <span class="how-number">{index + 1}</span>
+            <div>
+              <h3>{step.title}</h3>
+              <p>{step.text}</p>
+            </div>
+          </article>
+        ))}
+      </div>
+
+      <div class="notification-shell" aria-label="Пример уведомления KLYXON">
+        <article class="notification-card">
+          <div class="notification-head">
+            <span class="notification-avatar">K</span>
+            <div>
+              <strong>KLYXON bot</strong>
+              <small>Новое релевантное сообщение</small>
+            </div>
+            <time>14:32</time>
+          </div>
+
+          <span class="notification-score">Целевой запрос · 0.94</span>
+          <p class="notification-message">«Ищем подрядчика для интеграции WMS с 1С. Складская сеть в пяти регионах, нужен опыт аналогичных внедрений.»</p>
+
+          <div class="notification-meta">
+            <span>Чат «Логистика и автоматизация»</span>
+            <span>Проект «Интеграции»</span>
+          </div>
+
+          <a href="https://t.me/Klyxon_bot" target="_blank" rel="noreferrer">Открыть сообщение →</a>
         </article>
-      ))}
+      </div>
     </div>
   </div>
 </section>
+
+<style>
+  .how-head {
+    max-width: 760px;
+  }
+
+  .how-grid {
+    display: grid;
+    grid-template-columns: .92fr 1.08fr;
+    gap: 42px;
+    align-items: stretch;
+  }
+
+  .how-steps {
+    display: grid;
+    gap: 16px;
+  }
+
+  .how-step {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 16px;
+    align-items: start;
+    padding: 22px;
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    background: rgba(255, 255, 255, .62);
+    box-shadow: 0 12px 40px rgba(9, 20, 30, .035);
+  }
+
+  .how-number {
+    width: 38px;
+    height: 38px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: #e7f2ef;
+    color: #315f55;
+    font-weight: 800;
+  }
+
+  .how-step h3 {
+    margin: 3px 0 7px;
+    font-size: 18px;
+  }
+
+  .how-step p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  .notification-shell {
+    min-height: 100%;
+    display: grid;
+    place-items: center;
+    padding: clamp(20px, 4vw, 42px);
+    border: 1px solid var(--line);
+    border-radius: 26px;
+    background:
+      radial-gradient(circle at 76% 16%, rgba(112, 198, 173, .22), transparent 34%),
+      linear-gradient(145deg, #eee8dd, #f7f4ee);
+  }
+
+  .notification-card {
+    width: min(100%, 540px);
+    padding: 24px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, .95);
+    border: 1px solid rgba(23, 32, 39, .08);
+    box-shadow: 0 24px 70px rgba(10, 20, 30, .10);
+  }
+
+  .notification-head {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .notification-avatar {
+    width: 38px;
+    height: 38px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--green);
+    color: #fff;
+    font-weight: 800;
+  }
+
+  .notification-head strong,
+  .notification-head small {
+    display: block;
+  }
+
+  .notification-head small,
+  .notification-head time {
+    color: var(--muted);
+    font-size: 12px;
+  }
+
+  .notification-score {
+    display: inline-flex;
+    margin: 20px 0 14px;
+    padding: 6px 11px;
+    border-radius: 999px;
+    background: #e3f2ec;
+    color: #1b6f5b;
+    font-size: 12px;
+    font-weight: 800;
+  }
+
+  .notification-message {
+    margin: 0;
+    font-size: 17px;
+    line-height: 1.6;
+  }
+
+  .notification-meta {
+    display: grid;
+    gap: 4px;
+    margin: 18px 0;
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  .notification-card a {
+    display: block;
+    padding-top: 16px;
+    border-top: 1px solid var(--line);
+    color: #1b6f5b;
+    font-weight: 800;
+    font-size: 14px;
+  }
+
+  @media (max-width: 900px) {
+    .how-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .how-grid {
+      gap: 20px;
+    }
+
+    .how-step {
+      padding: 18px;
+    }
+
+    .notification-shell {
+      padding: 14px;
+      border-radius: 22px;
+    }
+
+    .notification-card {
+      padding: 20px;
+    }
+
+    .notification-message {
+      font-size: 15px;
+    }
+  }
+</style>

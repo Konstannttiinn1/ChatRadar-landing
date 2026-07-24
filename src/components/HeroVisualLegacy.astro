@@ -5,33 +5,6 @@ const { site, example } = Astro.props;
   <div class="message-eye message-eye-animated" aria-hidden="true" data-chatradar-eye-wrap>
     <canvas data-chatradar-eye-canvas></canvas>
   </div>
-
-  <div class="pipeline pipeline-v2">
-    <article class="pipeline-card chat-card">
-      <div class="pipeline-label"><span>1</span>Сообщение в чате</div>
-      <small>{example.source} · {example.author}</small>
-      <p>{example.message}</p>
-    </article>
-
-    <span class="arrow">→</span>
-
-    <article class="pipeline-card llm-card">
-      <div class="pipeline-label"><span>2</span>Анализ LLM</div>
-      <small>Проверка по вашей логике</small>
-      <strong>{example.category}</strong>
-      <em>Уверенность: {example.confidence}</em>
-      <p class="pipeline-reason">{example.reason}</p>
-    </article>
-
-    <span class="arrow">→</span>
-
-    <article class="pipeline-card notification">
-      <div class="pipeline-label"><span>3</span>Уведомление в Telegram</div>
-      <small>KLYXON bot</small>
-      <p><b>Новый релевантный запрос</b><br />{example.author} ищет решение в чате.</p>
-      <a href={site.botUrl} target="_blank" rel="noreferrer">Открыть сообщение</a>
-    </article>
-  </div>
 </div>
 
 <style>
@@ -307,44 +280,32 @@ const { site, example } = Astro.props;
 
       stars.forEach((s) => {
         s.tw += s.twSpeed;
-        const a = s.base + Math.sin(s.tw) * s.base * 0.7;
-        ctx.globalAlpha = Math.max(0, a);
+        ctx.globalAlpha = s.base + Math.sin(s.tw) * 0.08;
+        ctx.fillStyle = '#d8fff2';
         ctx.beginPath();
         ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(180,220,200,1)';
         ctx.fill();
       });
       ctx.globalAlpha = 1;
 
-      sweep += 0.006;
-
-      ctx.save();
-      const zg = ctx.createRadialGradient(CX, CY, 0, CX, CY, RR * 1.6);
-      zg.addColorStop(0, 'rgba(45,75,62,0.3)');
-      zg.addColorStop(0.6, 'rgba(30,50,42,0.15)');
-      zg.addColorStop(1, 'rgba(20,30,28,0)');
-      ctx.fillStyle = zg;
-      ctx.beginPath();
-      ctx.arc(CX, CY, RR * 1.6, 0, Math.PI * 2);
-      ctx.fill();
-
-      [0.38, 0.62, 0.88, 1.15, 1.45].forEach((f, i) => {
+      ctx.strokeStyle = `rgba(${T.radar},0.1)`;
+      ctx.lineWidth = 1;
+      for (let i = 1; i <= 4; i++) {
         ctx.beginPath();
-        ctx.arc(CX, CY, RR * f, 0, Math.PI * 2);
-        ctx.strokeStyle = `rgba(${T.radar},${0.1 - i * 0.015})`;
-        ctx.lineWidth = 1;
+        ctx.arc(CX, CY, RR * i * 0.65, 0, Math.PI * 2);
         ctx.stroke();
-      });
+      }
+
+      ctx.strokeStyle = `rgba(${T.radar},0.08)`;
+      ctx.beginPath();
+      ctx.moveTo(CX - EHW, CY);
+      ctx.lineTo(CX + EHW, CY);
+      ctx.stroke();
 
       ctx.beginPath();
-      ctx.moveTo(CX - RR * 1.45, CY);
-      ctx.lineTo(CX + RR * 1.45, CY);
-      ctx.moveTo(CX, CY - RR * 1.45);
-      ctx.lineTo(CX, CY + RR * 1.45);
-      ctx.strokeStyle = `rgba(${T.radar},0.05)`;
-      ctx.lineWidth = 0.6;
+      ctx.moveTo(CX, CY - EHH);
+      ctx.lineTo(CX, CY + EHH);
       ctx.stroke();
-      ctx.restore();
 
       msgs.forEach((m) => {
         if (m.stagger > 0) {
@@ -353,80 +314,64 @@ const { site, example } = Astro.props;
         }
 
         m.tx += m.speed;
-        m.bob += 0.02;
-        if (m.flash > 0) m.flash -= 0.04;
+        m.bob += 0.018;
 
-        const { x, y } = m.pos();
-        const dist = Math.sqrt((x - CX) ** 2 + (y - CY) ** 2);
-        if (!m.detected && dist < DR) {
+        if (!m.detected && m.tx > 0.48 && m.tx < 0.54 && m.type === 'lead') {
           m.detected = true;
           m.flash = 1;
-          if (m.type === 'lead') leads++;
+          leads++;
         }
-        if (m.detected && dist > DR && x > CX) m.detected = false;
-        if (m.tx > 1.12) m.reset(Math.floor(Math.random() * (isMobile ? 8 : 30)));
 
+        if (m.flash > 0) m.flash *= 0.94;
+        if (m.tx > 1.14) m.reset();
         drawMsg(m);
       });
 
-      ctx.save();
+      sweep += 0.009;
+      const sweepAngle = sweep % (Math.PI * 2);
+      const sx = CX + Math.cos(sweepAngle) * DR;
+      const sy = CY + Math.sin(sweepAngle) * DR;
+      const grad = ctx.createLinearGradient(CX, CY, sx, sy);
+      grad.addColorStop(0, `rgba(${T.radar},0.95)`);
+      grad.addColorStop(0.45, `rgba(${T.radar},0.32)`);
+      grad.addColorStop(1, `rgba(${T.radar},0)`);
+      ctx.strokeStyle = grad;
+      ctx.lineWidth = isMobile ? 2 : 2.5;
       ctx.beginPath();
       ctx.moveTo(CX, CY);
-      ctx.arc(CX, CY, RR * 1.45, sweep, sweep + 0.4);
-      ctx.closePath();
-      const sg = ctx.createRadialGradient(CX, CY, 0, CX, CY, RR * 1.45);
-      sg.addColorStop(0, `rgba(${T.radar},0.13)`);
-      sg.addColorStop(1, `rgba(${T.radar},0)`);
-      ctx.fillStyle = sg;
-      ctx.fill();
-      ctx.beginPath();
-      ctx.moveTo(CX, CY);
-      ctx.lineTo(CX + Math.cos(sweep) * RR * 1.45, CY + Math.sin(sweep) * RR * 1.45);
-      ctx.strokeStyle = `rgba(${T.radar},0.4)`;
-      ctx.lineWidth = 1.3;
+      ctx.lineTo(sx, sy);
       ctx.stroke();
-      ctx.restore();
 
-      const p = Math.sin(frame * 0.04) * 0.25 + 0.75;
-      const coreGlow = isMobile ? 30 : 36;
-      ctx.save();
-      const cg = ctx.createRadialGradient(CX, CY, 0, CX, CY, coreGlow);
-      cg.addColorStop(0, `rgba(${T.core},${0.5 * p})`);
-      cg.addColorStop(0.4, `rgba(${T.core},${0.2 * p})`);
-      cg.addColorStop(1, `rgba(${T.core},0)`);
-      ctx.fillStyle = cg;
+      const glow = ctx.createRadialGradient(CX, CY, 0, CX, CY, RR * 1.7);
+      glow.addColorStop(0, `rgba(${T.core},0.28)`);
+      glow.addColorStop(0.35, `rgba(${T.radar},0.06)`);
+      glow.addColorStop(1, `rgba(${T.radar},0)`);
+      ctx.fillStyle = glow;
       ctx.beginPath();
-      ctx.arc(CX, CY, coreGlow, 0, Math.PI * 2);
+      ctx.arc(CX, CY, RR * 1.7, 0, Math.PI * 2);
       ctx.fill();
-      ctx.shadowColor = `rgb(${T.core})`;
-      ctx.shadowBlur = (isMobile ? 15 : 18) * p;
+
+      ctx.fillStyle = '#aaf2d1';
+      ctx.shadowColor = '#80e5b5';
+      ctx.shadowBlur = 22;
       ctx.beginPath();
-      ctx.arc(CX, CY, isMobile ? 8 : 10, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(${T.core},0.95)`;
+      ctx.arc(CX, CY, isMobile ? 7 : 9, 0, Math.PI * 2);
       ctx.fill();
       ctx.shadowBlur = 0;
-      ctx.beginPath();
-      ctx.arc(CX, CY, isMobile ? 3.5 : 4.5, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(15,40,32,0.6)';
-      ctx.fill();
-      ctx.restore();
 
       drawHud();
       rafId = requestAnimationFrame(loop);
     }
 
+    const ro = new ResizeObserver(resize);
+    ro.observe(wrap);
     resize();
-    const observer = new ResizeObserver(resize);
-    observer.observe(wrap);
-    rafId = requestAnimationFrame(loop);
+    loop();
 
-    document.addEventListener('visibilitychange', () => {
-      if (document.hidden) {
-        cancelAnimationFrame(rafId);
-      } else {
-        rafId = requestAnimationFrame(loop);
-      }
-    });
+    document.addEventListener('astro:before-swap', () => {
+      ro.disconnect();
+      cancelAnimationFrame(rafId);
+    }, { once: true });
   });
 })();
 </script>

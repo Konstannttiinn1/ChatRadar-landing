@@ -18,69 +18,82 @@ const { site, example } = Astro.props;
         <a class="button button-ghost" href={site.supportUrl} target="_blank" rel="noreferrer">Связаться</a>
         <a class="button button-ghost subtle" href="#how-it-works">Как это работает</a>
       </div>
-      <div class="hero-benefits">
-        <span><b>Реальное время:</b> новые сообщения проверяются сразу</span>
-        <span><b>Целевые запросы:</b> заявки, жалобы, поиск услуг и товаров</span>
-        <span><b>Уведомления</b> приходят в Telegram</span>
-        <span><b>Контроль:</b> только выбранные чаты и темы</span>
-      </div>
     </div>
 
     <HeroVisual site={site} example={example} />
 
-    <aside class="hero-alert-tourism" aria-label="Примеры уведомлений по туризму">
+    <aside class="hero-alert-preview hero-alert-row-one" aria-label="Примеры уведомлений по товарам и услугам">
       <div class="hero-alert-head">
         <span>Примеры уведомлений</span>
         <small>LLM отделяет целевое от шума</small>
       </div>
-
-      <article class="hero-alert-card hero-alert-card-good">
-        <span class="hero-alert-badge">ЦЕЛЕВОЙ · 0.91</span>
-        <b>Организовать поездку</b>
-        <p>Кто поможет собрать тур в Стамбул: перелёт, жильё и маршрут?</p>
-        <small>Ищет услугу: стоит быстро ответить.</small>
-      </article>
-
-      <article class="hero-alert-card hero-alert-card-warn">
-        <span class="hero-alert-badge">ПРОВЕРИТЬ · 0.55</span>
-        <b>Нужна рекомендация</b>
-        <p>Кто летал в августе? Где лучше остановиться и что посмотреть?</p>
-        <small>Есть интерес, но нет явного заказа.</small>
-      </article>
-
-      <article class="hero-alert-card hero-alert-card-drop">
-        <span class="hero-alert-badge">ШУМ · 0.07</span>
-        <b>Просто обсуждение</b>
-        <p>Делятся впечатлениями о поездке без запроса на подбор тура.</p>
-        <small>Не лид: нет намерения купить услугу.</small>
-      </article>
-    </aside>
-
-    <aside class="hero-alert-preview" aria-label="Примеры уведомлений в Telegram">
-      <div class="hero-alert-head">
-        <span>Примеры уведомлений</span>
-        <small>LLM отделяет целевое от шума</small>
-      </div>
-
       <article class="hero-alert-card hero-alert-card-good">
         <span class="hero-alert-badge">ЦЕЛЕВОЙ · 0.94</span>
         <b>Купить запчасти</b>
         <p>Где взять передние колодки на Camry? Нужен проверенный поставщик.</p>
         <small>Целевой запрос: пользователь ищет товар.</small>
       </article>
-
       <article class="hero-alert-card hero-alert-card-warn">
         <span class="hero-alert-badge">ПРОВЕРИТЬ · 0.52</span>
         <b>Нужна рекомендация</b>
         <p>Кто недавно менял масло в районе? Интересует нормальный сервис.</p>
         <small>Сомнительно: можно проверить вручную.</small>
       </article>
-
       <article class="hero-alert-card hero-alert-card-drop">
         <span class="hero-alert-badge">ШУМ · 0.08</span>
         <b>Просто обсуждение</b>
-        <p>Опять спорят, какие колодки лучше, без запроса на покупку.</p>
-        <small>Не лид: нет намерения купить или заказать.</small>
+        <p>Спорят, какие колодки лучше, без запроса на покупку.</p>
+        <small>Не лид: нет намерения заказать.</small>
+      </article>
+    </aside>
+
+    <aside class="hero-alert-preview hero-alert-row-two" aria-label="Примеры уведомлений по разработке">
+      <div class="hero-alert-head">
+        <span>Разработка и digital</span>
+        <small>Запросы на специалистов и подрядчиков</small>
+      </div>
+      <article class="hero-alert-card hero-alert-card-good">
+        <span class="hero-alert-badge">ЦЕЛЕВОЙ · 0.92</span>
+        <b>Нужен разработчик</b>
+        <p>Ищем frontend-разработчика на проект, старт на следующей неделе.</p>
+        <small>Есть конкретная задача и срок.</small>
+      </article>
+      <article class="hero-alert-card hero-alert-card-warn">
+        <span class="hero-alert-badge">ПРОВЕРИТЬ · 0.57</span>
+        <b>Выбор подрядчика</b>
+        <p>Кто работал с командами по автоматизации CRM?</p>
+        <small>Есть интерес, но нет прямого заказа.</small>
+      </article>
+      <article class="hero-alert-card hero-alert-card-drop">
+        <span class="hero-alert-badge">ШУМ · 0.06</span>
+        <b>Обсуждение технологии</b>
+        <p>Участники сравнивают фреймворки без поиска исполнителя.</p>
+        <small>Не лид: нет делового запроса.</small>
+      </article>
+    </aside>
+
+    <aside class="hero-alert-preview hero-alert-row-three" aria-label="Примеры уведомлений по логистике">
+      <div class="hero-alert-head">
+        <span>Логистика и поставки</span>
+        <small>Локальный и B2B-спрос</small>
+      </div>
+      <article class="hero-alert-card hero-alert-card-good">
+        <span class="hero-alert-badge">ЦЕЛЕВОЙ · 0.93</span>
+        <b>Нужна перевозка</b>
+        <p>Кто поможет перевезти мебель из района в центр в субботу?</p>
+        <small>Прямой запрос на логистическую услугу.</small>
+      </article>
+      <article class="hero-alert-card hero-alert-card-good">
+        <span class="hero-alert-badge">ЦЕЛЕВОЙ · 0.89</span>
+        <b>Ищут поставщика</b>
+        <p>Нужна упаковка для интернет-магазина небольшим оптом.</p>
+        <small>Потенциальный коммерческий контакт.</small>
+      </article>
+      <article class="hero-alert-card hero-alert-card-drop">
+        <span class="hero-alert-badge">ШУМ · 0.09</span>
+        <b>Новости рынка</b>
+        <p>Пересылают отраслевую новость без запроса на услугу.</p>
+        <small>Не лид: информационное сообщение.</small>
       </article>
     </aside>
   </div>
