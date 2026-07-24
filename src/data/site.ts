@@ -5,9 +5,10 @@ export const site = {
   botUrl: 'https://t.me/Klyxon_bot',
   supportUrl: 'https://t.me/L_Konstantinn',
   nav: [
-    { label: 'Как это работает', href: '#how-it-works' },
-    { label: 'Возможности', href: '#features' },
+    { label: 'Как начать', href: '#how-it-works' },
+    { label: 'Технология', href: '#features' },
     { label: 'Оценка чатов', href: '#chat-quality' },
+    { label: 'Сценарии', href: '#use-cases' },
     { label: 'Тарифы', href: '#pricing' },
     { label: 'FAQ', href: '#faq' }
   ],
