@@ -1,20 +1,154 @@
 ---
-const { useCases } = Astro.props;
+const industries = [
+  'B2B-продажи и лидогенерация',
+  'Логистика и цепочки поставок',
+  'IT, SaaS и разработка',
+  'Закупки и поиск подрядчиков',
+  'Клиентский сервис и репутация',
+  'Маркетинговая аналитика'
+];
+
+const examples = [
+  {
+    tone: 'hit',
+    badge: 'Целевой · 0.93',
+    text: 'Ищем оператора последней мили для доставки заказов в 12 городах. Нужна интеграция по API и ежедневная отчётность.',
+    meta: 'Отраслевой чат → проект «Логистика»'
+  },
+  {
+    tone: 'hit',
+    badge: 'Целевой · 0.91',
+    text: 'Нужна команда для разработки внутреннего Telegram-сервиса с интеграцией CRM и системой ролей.',
+    meta: 'Чат предпринимателей → проект «Разработка»'
+  },
+  {
+    tone: 'noise',
+    badge: 'Шум · 0.05',
+    text: 'Кто-нибудь видел вчерашнее обновление Telegram? Интерфейс опять поменяли.',
+    meta: 'Отсеяно до уведомления'
+  }
+];
 ---
-<section class="section section-light" id="use-cases">
-  <div class="container split-section">
-    <div>
-      <p class="section-kicker">Где применимо</p>
-      <h2>Для задач, где важно реагировать первым</h2>
-      <p class="muted">KLYXON подходит для команд, которые ищут запросы, обращения и возможности в потоке Telegram-чатов.</p>
+<section class="section section-light scenarios-section" id="use-cases">
+  <div class="container">
+    <div class="section-head scenarios-head">
+      <p class="section-kicker">Сценарии применения</p>
+      <h2>Для команд, которым важно видеть спрос раньше других</h2>
+      <p class="muted">KLYXON помогает замечать запросы, потребности и деловые сигналы в отраслевых и профессиональных Telegram-сообществах.</p>
     </div>
-    <div class="usecase-list">
-      {useCases.map((item) => (
-        <article>
-          <h3>{item.title}</h3>
-          <p>{item.text}</p>
+
+    <div class="industry-chips" aria-label="Сценарии применения KLYXON">
+      {industries.map((industry) => <span>{industry}</span>)}
+    </div>
+
+    <div class="scenario-list">
+      {examples.map((item) => (
+        <article class:list={['scenario-card', { 'is-noise': item.tone === 'noise' }]}>
+          <p>«{item.text}»</p>
+          <div class="scenario-meta">
+            <span class:list={['scenario-badge', `is-${item.tone}`]}>{item.badge}</span>
+            <span>{item.meta}</span>
+          </div>
         </article>
       ))}
     </div>
   </div>
 </section>
+
+<style>
+  .scenarios-head {
+    max-width: 840px;
+  }
+
+  .industry-chips {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 28px;
+  }
+
+  .industry-chips span {
+    padding: 10px 16px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, .44);
+    font-size: 14px;
+  }
+
+  .scenario-list {
+    display: grid;
+    gap: 14px;
+    max-width: 980px;
+    margin: 0 auto;
+  }
+
+  .scenario-card {
+    padding: 22px 24px;
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    background: rgba(255, 255, 255, .78);
+    box-shadow: 0 12px 40px rgba(9, 20, 30, .04);
+  }
+
+  .scenario-card.is-noise {
+    background: transparent;
+    border-style: dashed;
+    box-shadow: none;
+  }
+
+  .scenario-card > p {
+    margin: 0 0 15px;
+    font-size: 17px;
+    line-height: 1.6;
+  }
+
+  .scenario-card.is-noise > p,
+  .scenario-card.is-noise .scenario-meta {
+    color: #98a09e;
+  }
+
+  .scenario-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  .scenario-badge {
+    padding: 5px 11px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 800;
+  }
+
+  .scenario-badge.is-hit {
+    background: #e3f2ec;
+    color: #1b6f5b;
+  }
+
+  .scenario-badge.is-noise {
+    background: #efede8;
+    color: #8b9492;
+  }
+
+  @media (max-width: 600px) {
+    .industry-chips {
+      justify-content: flex-start;
+    }
+
+    .industry-chips span {
+      font-size: 13px;
+    }
+
+    .scenario-card {
+      padding: 19px;
+    }
+
+    .scenario-card > p {
+      font-size: 15px;
+    }
+  }
+</style>
