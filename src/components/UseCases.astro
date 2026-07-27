@@ -1,154 +1,322 @@
 ---
-const industries = [
-  'B2B-продажи и лидогенерация',
-  'Логистика и цепочки поставок',
-  'IT, SaaS и разработка',
-  'Закупки и поиск подрядчиков',
-  'Клиентский сервис и репутация',
-  'Маркетинговая аналитика'
-];
-
-const examples = [
+const solutions = [
   {
-    tone: 'hit',
-    badge: 'Целевой · 0.93',
-    text: 'Ищем оператора последней мили для доставки заказов в 12 городах. Нужна интеграция по API и ежедневная отчётность.',
-    meta: 'Отраслевой чат → проект «Логистика»'
+    id: 'logistics',
+    number: '01',
+    kicker: 'Логистика, поставки и торговля',
+    title: 'Находите запросы на закупку, поставку и доставку товаров',
+    description:
+      'В чатах предпринимателей, селлеров и участников внешней торговли постоянно появляются запросы на поиск байеров, поставщиков, перевозчиков и специалистов по доставке из Китая. KLYXON помогает заметить такой запрос сразу, пока он не потерялся среди обычных сообщений и рекламы.',
+    audiences: [
+      'Байеры и агенты по закупкам',
+      'Логистические и карго-компании',
+      'Поставщики товаров',
+      'Фулфилмент и склады',
+      'Таможенные брокеры'
+    ],
+    examples: [
+      'Ищу байера, который поможет найти производителя и договориться о закупке товара в Китае.',
+      'Нужен поставщик этой категории товаров. Интересуют цены и минимальная партия.',
+      'Кто может организовать выкуп и доставку сборного груза из Гуанчжоу?',
+      'Ищем надёжную логистическую компанию для регулярных поставок из Китая в Россию.'
+    ],
+    filter:
+      'Фильтр может пропускать только сообщения с реальной потребностью и исключать рекламу перевозчиков, общие обсуждения, новости и предложения без запроса со стороны клиента.'
   },
   {
-    tone: 'hit',
-    badge: 'Целевой · 0.91',
-    text: 'Нужна команда для разработки внутреннего Telegram-сервиса с интеграцией CRM и системой ролей.',
-    meta: 'Чат предпринимателей → проект «Разработка»'
-  },
-  {
-    tone: 'noise',
-    badge: 'Шум · 0.05',
-    text: 'Кто-нибудь видел вчерашнее обновление Telegram? Интерфейс опять поменяли.',
-    meta: 'Отсеяно до уведомления'
+    id: 'it',
+    number: '02',
+    kicker: 'IT, автоматизация и digital',
+    title: 'Получайте уведомления о новых заказах и поиске подрядчиков',
+    description:
+      'В предпринимательских и профессиональных чатах компании ищут специалистов по разработке, маркетингу, автоматизации и внедрению бизнес-систем. KLYXON отслеживает такие сообщения и помогает IT-компаниям, агентствам и частным специалистам быстрее выходить на потенциального клиента.',
+    audiences: [
+      'IT-компании и веб-студии',
+      'CRM- и 1С-интеграторы',
+      'Маркетологи и агентства',
+      'Разработчики и специалисты по автоматизации',
+      'Системные администраторы'
+    ],
+    examples: [
+      'Нужен подрядчик для внедрения CRM и переноса текущей клиентской базы.',
+      'Ищем специалиста, который настроит 1С и обмен данными с интернет-магазином.',
+      'Кто может разработать сайт и связать заявки с нашей системой учёта?',
+      'Нужен маркетолог для настройки рекламы и аналитики по новому направлению.'
+    ],
+    filter:
+      'Можно отделить реальные заказы от вакансий, саморекламы, обучения, новостей и обсуждений технологий без намерения заказать услугу.'
   }
 ];
 ---
-<section class="section section-light scenarios-section" id="use-cases">
+<section class="section section-light solutions-section" id="use-cases">
   <div class="container">
-    <div class="section-head scenarios-head">
-      <p class="section-kicker">Сценарии применения</p>
-      <h2>Для команд, которым важно видеть спрос раньше других</h2>
-      <p class="muted">KLYXON помогает замечать запросы, потребности и деловые сигналы в отраслевых и профессиональных Telegram-сообществах.</p>
+    <div class="section-head solutions-head">
+      <p class="section-kicker">Решения для бизнеса</p>
+      <h2>Один сервис — разные сценарии поиска клиентов и подрядчиков</h2>
+      <p class="muted">
+        KLYXON можно настроить под любую отрасль, в которой спрос, предложения и деловые запросы появляются в Telegram-чатах. Ниже — два практических примера применения.
+      </p>
     </div>
 
-    <div class="industry-chips" aria-label="Сценарии применения KLYXON">
-      {industries.map((industry) => <span>{industry}</span>)}
-    </div>
+    <div class="solutions-list">
+      {solutions.map((solution) => (
+        <article class="solution-card" id={`solution-${solution.id}`}>
+          <div class="solution-intro">
+            <div class="solution-label">
+              <span>{solution.number}</span>
+              <p>{solution.kicker}</p>
+            </div>
+            <h3>{solution.title}</h3>
+            <p class="solution-description">{solution.description}</p>
 
-    <div class="scenario-list">
-      {examples.map((item) => (
-        <article class:list={['scenario-card', { 'is-noise': item.tone === 'noise' }]}>
-          <p>«{item.text}»</p>
-          <div class="scenario-meta">
-            <span class:list={['scenario-badge', `is-${item.tone}`]}>{item.badge}</span>
-            <span>{item.meta}</span>
+            <div class="audience-block">
+              <h4>Кому подходит</h4>
+              <div class="audience-tags">
+                {solution.audiences.map((audience) => <span>{audience}</span>)}
+              </div>
+            </div>
+          </div>
+
+          <div class="solution-demo">
+            <div class="demo-head">
+              <span class="demo-dot"></span>
+              <p>Примеры целевых сообщений</p>
+            </div>
+
+            <div class="message-list">
+              {solution.examples.map((example) => (
+                <div class="message-card">
+                  <span class="message-badge">Целевой запрос</span>
+                  <p>«{example}»</p>
+                </div>
+              ))}
+            </div>
+
+            <div class="filter-note">
+              <strong>Что отсеет LLM-фильтрация</strong>
+              <p>{solution.filter}</p>
+            </div>
           </div>
         </article>
       ))}
     </div>
+
+    <p class="solutions-footnote">
+      Новые направления можно добавлять по этому же принципу: строительство и ремонт, сервисное обслуживание, недвижимость, производство, подбор персонала и другие отрасли.
+    </p>
   </div>
 </section>
 
 <style>
-  .scenarios-head {
-    max-width: 840px;
+  .solutions-head {
+    max-width: 900px;
   }
 
-  .industry-chips {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 28px;
-  }
-
-  .industry-chips span {
-    padding: 10px 16px;
-    border: 1px solid var(--line);
-    border-radius: 999px;
-    background: rgba(255, 255, 255, .44);
-    font-size: 14px;
-  }
-
-  .scenario-list {
+  .solutions-list {
     display: grid;
-    gap: 14px;
-    max-width: 980px;
-    margin: 0 auto;
+    gap: 28px;
   }
 
-  .scenario-card {
-    padding: 22px 24px;
+  .solution-card {
+    display: grid;
+    grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr);
+    gap: 34px;
+    padding: 34px;
     border: 1px solid var(--line);
-    border-radius: 20px;
-    background: rgba(255, 255, 255, .78);
-    box-shadow: 0 12px 40px rgba(9, 20, 30, .04);
+    border-radius: 28px;
+    background: rgba(255, 255, 255, .72);
+    box-shadow: 0 18px 55px rgba(9, 20, 30, .05);
+    scroll-margin-top: 110px;
   }
 
-  .scenario-card.is-noise {
-    background: transparent;
-    border-style: dashed;
-    box-shadow: none;
-  }
-
-  .scenario-card > p {
-    margin: 0 0 15px;
-    font-size: 17px;
-    line-height: 1.6;
-  }
-
-  .scenario-card.is-noise > p,
-  .scenario-card.is-noise .scenario-meta {
-    color: #98a09e;
-  }
-
-  .scenario-meta {
+  .solution-label {
     display: flex;
-    flex-wrap: wrap;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+
+  .solution-label span {
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: #183f36;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: .04em;
+  }
+
+  .solution-label p {
+    margin: 0;
+    color: #35685c;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+
+  .solution-card h3 {
+    margin: 0 0 16px;
+    font-size: clamp(25px, 3vw, 38px);
+    line-height: 1.13;
+  }
+
+  .solution-description {
+    margin: 0;
     color: var(--muted);
+    font-size: 16px;
+    line-height: 1.72;
+  }
+
+  .audience-block {
+    margin-top: 28px;
+  }
+
+  .audience-block h4,
+  .filter-note strong {
+    display: block;
+    margin: 0 0 12px;
     font-size: 14px;
   }
 
-  .scenario-badge {
-    padding: 5px 11px;
+  .audience-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .audience-tags span {
+    padding: 8px 11px;
+    border: 1px solid var(--line);
     border-radius: 999px;
-    font-size: 12px;
+    background: rgba(246, 241, 229, .72);
+    font-size: 13px;
+    line-height: 1.25;
+  }
+
+  .solution-demo {
+    padding: 20px;
+    border: 1px solid rgba(25, 75, 63, .12);
+    border-radius: 22px;
+    background: #f4f7f4;
+  }
+
+  .demo-head {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin-bottom: 14px;
+  }
+
+  .demo-head p {
+    margin: 0;
+    color: #31594f;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+  }
+
+  .demo-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #d69a2d;
+    box-shadow: 0 0 0 5px rgba(214, 154, 45, .13);
+  }
+
+  .message-list {
+    display: grid;
+    gap: 10px;
+  }
+
+  .message-card {
+    padding: 15px 16px;
+    border: 1px solid rgba(25, 75, 63, .11);
+    border-radius: 15px;
+    background: #fff;
+  }
+
+  .message-card p {
+    margin: 8px 0 0;
+    font-size: 14px;
+    line-height: 1.55;
+  }
+
+  .message-badge {
+    display: inline-flex;
+    padding: 4px 8px;
+    border-radius: 999px;
+    background: #e3f2ec;
+    color: #1b6f5b;
+    font-size: 11px;
     font-weight: 800;
   }
 
-  .scenario-badge.is-hit {
-    background: #e3f2ec;
-    color: #1b6f5b;
+  .filter-note {
+    margin-top: 14px;
+    padding: 15px 16px;
+    border: 1px dashed rgba(25, 75, 63, .21);
+    border-radius: 15px;
+    background: rgba(255, 255, 255, .46);
   }
 
-  .scenario-badge.is-noise {
-    background: #efede8;
-    color: #8b9492;
+  .filter-note strong {
+    margin-bottom: 7px;
+    color: #31594f;
+  }
+
+  .filter-note p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.55;
+  }
+
+  .solutions-footnote {
+    max-width: 920px;
+    margin: 26px auto 0;
+    color: var(--muted);
+    text-align: center;
+    font-size: 14px;
+    line-height: 1.65;
+  }
+
+  @media (max-width: 860px) {
+    .solution-card {
+      grid-template-columns: 1fr;
+      gap: 26px;
+    }
   }
 
   @media (max-width: 600px) {
-    .industry-chips {
-      justify-content: flex-start;
+    .solution-card {
+      padding: 22px;
+      border-radius: 22px;
     }
 
-    .industry-chips span {
-      font-size: 13px;
+    .solution-demo {
+      padding: 14px;
     }
 
-    .scenario-card {
-      padding: 19px;
+    .solution-label {
+      align-items: flex-start;
     }
 
-    .scenario-card > p {
+    .solution-label p {
+      padding-top: 9px;
+      font-size: 11px;
+    }
+
+    .solution-description {
       font-size: 15px;
+    }
+
+    .message-card {
+      padding: 13px;
     }
   }
 </style>
