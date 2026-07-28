@@ -24,6 +24,17 @@ const schema = {
       }
     },
     {
+      '@type': 'Service',
+      '@id': `${canonicalUrl}#service`,
+      name: solution.title,
+      description: solution.description,
+      url: canonicalUrl,
+      provider: {
+        '@id': 'https://klyxon.app/#organization'
+      },
+      areaServed: 'RU'
+    },
+    {
       '@type': 'BreadcrumbList',
       itemListElement: [
         {
@@ -89,6 +100,17 @@ const schema = {
             <p class="section-kicker">{solution.kicker}</p>
             <h1>{solution.title}</h1>
             <p class="solution-hero-lead">{solution.intro}</p>
+
+            {solution.sections && (
+              <nav class="solution-section-nav" aria-label="Разделы автомобильного направления">
+                {solution.sections.map((section) => (
+                  <a href={`#${section.id}`}>
+                    <span>{section.number}</span>
+                    <strong>{section.title}</strong>
+                  </a>
+                ))}
+              </nav>
+            )}
           </div>
         </div>
       </section>
@@ -105,41 +127,102 @@ const schema = {
 
           <div class="solution-grid">
             <article class="solution-main">
-              <section>
-                <p class="section-kicker">Какие задачи можно находить</p>
-                <h2>Реальные сценарии использования</h2>
-                <ul class="solution-list">
-                  {solution.tasks.map((task) => <li>{task}</li>)}
-                </ul>
-              </section>
+              {solution.sections ? (
+                <>
+                  <section class="solution-overview">
+                    <p class="section-kicker">Одна ниша — несколько задач</p>
+                    <h2>Выберите подходящий сценарий</h2>
+                    <p>
+                      Автомобильное направление разделено на четыре практических сценария. Все они находятся на одной странице: можно перейти к нужному разделу через кнопки сверху или последовательно изучить примеры и настройки фильтрации.
+                    </p>
+                  </section>
 
-              <section>
-                <p class="section-kicker">Примеры сообщений</p>
-                <h2>Что может попасть в уведомление</h2>
-                <div class="solution-message-list">
-                  {solution.examples.map((example) => (
-                    <div class="solution-message">
-                      <span>Целевой запрос</span>
-                      <p>«{example}»</p>
-                    </div>
+                  {solution.sections.map((section) => (
+                    <section class="solution-scenario" id={section.id}>
+                      <div class="solution-scenario-head">
+                        <span class="solution-scenario-number">{section.number}</span>
+                        <span class="solution-scenario-icon" aria-hidden="true">{section.icon}</span>
+                        <div>
+                          <p class="section-kicker">Автомобильный сценарий</p>
+                          <h2>{section.title}</h2>
+                        </div>
+                      </div>
+
+                      <p class="solution-scenario-description">{section.description}</p>
+
+                      <div class="solution-scenario-columns">
+                        <div>
+                          <h3>Какие запросы отслеживать</h3>
+                          <ul class="solution-list">
+                            {section.tasks.map((task) => <li>{task}</li>)}
+                          </ul>
+                        </div>
+
+                        <div>
+                          <h3>Примеры сообщений из чатов</h3>
+                          <div class="solution-message-list">
+                            {section.examples.map((example) => (
+                              <div class="solution-message">
+                                <span>Целевой запрос</span>
+                                <p>«{example}»</p>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="solution-filter">
+                        <strong>Что можно исключить</strong>
+                        <p>{section.filter}</p>
+                      </div>
+                    </section>
                   ))}
-                </div>
-              </section>
 
-              <section>
-                <p class="section-kicker">Смысловая фильтрация</p>
-                <h2>Как исключается шум</h2>
-                <div class="solution-filter">
-                  <strong>Что может отсеять KLYXON</strong>
-                  <p>{solution.filter}</p>
-                </div>
-              </section>
+                  <section>
+                    <p class="section-kicker">Пример настройки</p>
+                    <h2>Как можно описать автомобильную задачу для LLM</h2>
+                    <div class="solution-prompt">{solution.prompt}</div>
+                  </section>
+                </>
+              ) : (
+                <>
+                  <section>
+                    <p class="section-kicker">Какие задачи можно находить</p>
+                    <h2>Реальные сценарии использования</h2>
+                    <ul class="solution-list">
+                      {solution.tasks.map((task) => <li>{task}</li>)}
+                    </ul>
+                  </section>
 
-              <section>
-                <p class="section-kicker">Пример настройки</p>
-                <h2>Как можно описать задачу для LLM</h2>
-                <div class="solution-prompt">{solution.prompt}</div>
-              </section>
+                  <section>
+                    <p class="section-kicker">Примеры сообщений</p>
+                    <h2>Что может попасть в уведомление</h2>
+                    <div class="solution-message-list">
+                      {solution.examples.map((example) => (
+                        <div class="solution-message">
+                          <span>Целевой запрос</span>
+                          <p>«{example}»</p>
+                        </div>
+                      ))}
+                    </div>
+                  </section>
+
+                  <section>
+                    <p class="section-kicker">Смысловая фильтрация</p>
+                    <h2>Как исключается шум</h2>
+                    <div class="solution-filter">
+                      <strong>Что может отсеять KLYXON</strong>
+                      <p>{solution.filter}</p>
+                    </div>
+                  </section>
+
+                  <section>
+                    <p class="section-kicker">Пример настройки</p>
+                    <h2>Как можно описать задачу для LLM</h2>
+                    <div class="solution-prompt">{solution.prompt}</div>
+                  </section>
+                </>
+              )}
             </article>
 
             <aside class="solution-sidebar">
