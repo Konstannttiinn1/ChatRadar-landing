@@ -8,20 +8,30 @@ import { solutionList } from '../data/solutions';
         <p class="section-kicker">Решения для бизнеса</p>
         <h2>Примеры применения KLYXON</h2>
         <p class="muted">
-          Сервис можно настроить под разные отрасли и типы запросов. На главной оставлены только короткие примеры, а подробные сценарии открываются на отдельных страницах.
+          Выберите направление — внутри собраны живые примеры сообщений, варианты фильтрации и сценарии работы для конкретной отрасли.
         </p>
+        <span class="solutions-preview-hint">Выберите направление →</span>
       </div>
 
-      <div class="solutions-preview-grid">
+      <div class="solutions-preview-grid" aria-label="Примеры применения KLYXON">
         {solutionList.map((solution) => (
-          <a class="solution-preview-card" href={`/solutions/${solution.slug}/`}>
-            <span class="solution-preview-icon" aria-hidden="true">{solution.slug === 'logistics' ? '↗' : '⌘'}</span>
-            <div>
-              <h3>{solution.cardTitle}</h3>
-              <p>{solution.cardDescription}</p>
-              <strong>Посмотреть пример →</strong>
+          solution.active ? (
+            <a class="solution-preview-card" href={`/solutions/${solution.slug}/`}>
+              <span class="solution-preview-icon" aria-hidden="true">{solution.icon}</span>
+              <span class="solution-preview-text">
+                <strong>{solution.cardTitle}</strong>
+                <small>Смотреть пример →</small>
+              </span>
+            </a>
+          ) : (
+            <div class="solution-preview-card is-coming" aria-disabled="true">
+              <span class="solution-preview-icon" aria-hidden="true">{solution.icon}</span>
+              <span class="solution-preview-text">
+                <strong>{solution.cardTitle}</strong>
+                <small>Готовим пример</small>
+              </span>
             </div>
-          </a>
+          )
         ))}
       </div>
     </div>
@@ -36,81 +46,111 @@ import { solutionList } from '../data/solutions';
   .solutions-preview-inner {
     display: grid;
     grid-template-columns: .82fr 1.18fr;
-    gap: 28px;
+    gap: 34px;
     align-items: center;
-    padding: 28px;
+    padding: 32px;
     border: 1px solid var(--line);
-    border-radius: 26px;
-    background: rgba(255, 255, 255, .54);
+    border-radius: 28px;
+    background: rgba(255, 255, 255, .58);
+    box-shadow: 0 18px 60px rgba(9, 20, 30, .04);
+  }
+
+  .solutions-preview-copy {
+    max-width: 500px;
   }
 
   .solutions-preview-copy h2 {
-    margin: 7px 0 10px;
-    font-size: clamp(28px, 3vw, 40px);
+    margin: 7px 0 13px;
+    font-size: clamp(30px, 3.4vw, 46px);
+    line-height: 1.08;
   }
 
-  .solutions-preview-copy p:last-child {
+  .solutions-preview-copy p {
     margin: 0;
-    line-height: 1.65;
+    line-height: 1.68;
+  }
+
+  .solutions-preview-hint {
+    display: inline-block;
+    margin-top: 24px;
+    color: #1b6f5b;
+    font-size: 14px;
+    font-weight: 800;
   }
 
   .solutions-preview-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px;
+    gap: 10px;
   }
 
   .solution-preview-card {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    gap: 14px;
-    min-height: 172px;
-    padding: 20px;
-    border: 1px solid var(--line);
-    border-radius: 18px;
-    background: #fff;
-    box-shadow: 0 12px 34px rgba(9, 20, 30, .04);
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    min-height: 72px;
+    padding: 12px 16px;
+    border: 1px solid rgba(131, 216, 203, .18);
+    border-radius: 16px;
+    background: linear-gradient(135deg, #15302f, #102525);
+    color: #f7f4ee;
+    box-shadow: 0 10px 28px rgba(7, 16, 24, .10);
     transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
   }
 
-  .solution-preview-card:hover {
-    transform: translateY(-3px);
-    border-color: rgba(112, 198, 173, .65);
-    box-shadow: 0 18px 44px rgba(9, 20, 30, .08);
+  a.solution-preview-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(131, 216, 203, .62);
+    box-shadow: 0 15px 34px rgba(7, 16, 24, .16);
+  }
+
+  .solution-preview-card.is-coming {
+    opacity: .68;
+    box-shadow: none;
   }
 
   .solution-preview-icon {
     display: grid;
     place-items: center;
-    width: 38px;
-    height: 38px;
+    flex: 0 0 42px;
+    width: 42px;
+    height: 42px;
     border-radius: 50%;
-    background: #e7f2ef;
-    color: #315f55;
+    background: rgba(131, 216, 203, .12);
+    color: #83d8cb;
+    font-size: 12px;
     font-weight: 900;
+    letter-spacing: -.03em;
   }
 
-  .solution-preview-card h3 {
-    margin: 1px 0 8px;
-    font-size: 18px;
+  .solution-preview-text {
+    display: grid;
+    gap: 3px;
+    min-width: 0;
+  }
+
+  .solution-preview-text strong {
+    font-size: 15px;
     line-height: 1.25;
   }
 
-  .solution-preview-card p {
-    margin: 0 0 14px;
-    color: var(--muted);
-    font-size: 14px;
-    line-height: 1.52;
+  .solution-preview-text small {
+    color: #83d8cb;
+    font-size: 12px;
+    font-weight: 800;
   }
 
-  .solution-preview-card strong {
-    color: #1b6f5b;
-    font-size: 13px;
+  .solution-preview-card.is-coming small {
+    color: rgba(247, 244, 238, .54);
   }
 
   @media (max-width: 900px) {
     .solutions-preview-inner {
       grid-template-columns: 1fr;
+    }
+
+    .solutions-preview-copy {
+      max-width: 700px;
     }
   }
 
@@ -120,7 +160,7 @@ import { solutionList } from '../data/solutions';
     }
 
     .solutions-preview-inner {
-      padding: 20px;
+      padding: 21px;
       border-radius: 22px;
     }
 
@@ -129,7 +169,8 @@ import { solutionList } from '../data/solutions';
     }
 
     .solution-preview-card {
-      min-height: auto;
+      min-height: 66px;
+      padding: 10px 13px;
     }
   }
 </style>
