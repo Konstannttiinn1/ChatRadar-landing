@@ -1,5 +1,14 @@
 ---
-import { solutionList } from '../data/solutions';
+const solutionList = [
+  { slug: 'logistics', icon: '↗', cardTitle: 'Логистика и Китай' },
+  { slug: 'it', icon: '</>', cardTitle: 'IT, CRM и 1С' },
+  { slug: 'construction', icon: '⌂', cardTitle: 'Строительство и ремонт' },
+  { slug: 'marketing', icon: '◢', cardTitle: 'Маркетинг и продвижение' },
+  { slug: 'recruitment', icon: 'HR', cardTitle: 'HR и подбор' },
+  { slug: 'real-estate', icon: '▦', cardTitle: 'Недвижимость' },
+  { slug: 'automotive', icon: '◉', cardTitle: 'Автомобили и запчасти' },
+  { slug: 'service', icon: '⚙', cardTitle: 'Сервис и обслуживание' }
+];
 ---
 <section class="section section-light solutions-preview" id="use-cases">
   <div class="container">
@@ -15,23 +24,13 @@ import { solutionList } from '../data/solutions';
 
       <div class="solutions-preview-grid" aria-label="Примеры применения KLYXON">
         {solutionList.map((solution) => (
-          solution.active ? (
-            <a class="solution-preview-card" href={`/solutions/${solution.slug}/`}>
-              <span class="solution-preview-icon" aria-hidden="true">{solution.icon}</span>
-              <span class="solution-preview-text">
-                <strong>{solution.cardTitle}</strong>
-                <small>Смотреть пример →</small>
-              </span>
-            </a>
-          ) : (
-            <div class="solution-preview-card is-coming" aria-disabled="true">
-              <span class="solution-preview-icon" aria-hidden="true">{solution.icon}</span>
-              <span class="solution-preview-text">
-                <strong>{solution.cardTitle}</strong>
-                <small>Готовим пример</small>
-              </span>
-            </div>
-          )
+          <a class="solution-preview-card" href={`/solutions/${solution.slug}/`}>
+            <span class="solution-preview-icon" aria-hidden="true">{solution.icon}</span>
+            <span class="solution-preview-text">
+              <strong>{solution.cardTitle}</strong>
+              <small>Смотреть пример →</small>
+            </span>
+          </a>
         ))}
       </div>
     </div>
@@ -90,26 +89,18 @@ import { solutionList } from '../data/solutions';
     gap: 13px;
     min-height: 72px;
     padding: 12px 16px;
-    border: 1px solid rgba(131, 216, 203, .24);
+    border: 1px solid rgba(131, 216, 203, .22);
     border-radius: 16px;
-    background: linear-gradient(135deg, #153b37, #0f2f2d);
-    color: #fffdf8;
+    background: linear-gradient(135deg, #12312e, #0d2725);
+    color: #f7f4ee;
     box-shadow: 0 10px 28px rgba(7, 16, 24, .10);
-    transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease, background .2s ease;
+    transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
   }
 
-  a.solution-preview-card:hover {
+  .solution-preview-card:hover {
     transform: translateY(-2px);
-    border-color: rgba(131, 216, 203, .72);
-    background: linear-gradient(135deg, #194942, #123733);
+    border-color: rgba(131, 216, 203, .68);
     box-shadow: 0 15px 34px rgba(7, 16, 24, .16);
-  }
-
-  .solution-preview-card.is-coming {
-    border-color: rgba(49, 95, 85, .17);
-    background: linear-gradient(135deg, #eaf1ed, #e2ebe6);
-    color: #315f55;
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .42);
   }
 
   .solution-preview-icon {
@@ -119,16 +110,11 @@ import { solutionList } from '../data/solutions';
     width: 42px;
     height: 42px;
     border-radius: 50%;
-    background: rgba(131, 216, 203, .15);
-    color: #8ee4d4;
+    background: rgba(131, 216, 203, .13);
+    color: #83d8cb;
     font-size: 12px;
     font-weight: 900;
     letter-spacing: -.03em;
-  }
-
-  .is-coming .solution-preview-icon {
-    background: rgba(49, 95, 85, .10);
-    color: #4b796e;
   }
 
   .solution-preview-text {
@@ -143,13 +129,9 @@ import { solutionList } from '../data/solutions';
   }
 
   .solution-preview-text small {
-    color: #8ee4d4;
+    color: #83d8cb;
     font-size: 12px;
     font-weight: 800;
-  }
-
-  .solution-preview-card.is-coming small {
-    color: #6f8c84;
   }
 
   @media (max-width: 900px) {
