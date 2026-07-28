@@ -1,5 +1,5 @@
 import { defineConfig } from 'astro/config';
 
 export default defineConfig({
-  site: 'https://chatradar.bot'
+  site: 'https://klyxon.app'
 });
