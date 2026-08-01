@@ -1,0 +1,154 @@
+<section class="semantic-monitoring" aria-labelledby="semantic-monitoring-title">
+  <div class="container">
+    <div class="semantic-monitoring-shell">
+      <div class="semantic-monitoring-copy">
+        <p class="section-kicker">Фильтрация по словам и смыслу</p>
+        <h2 id="semantic-monitoring-title">Сервис мониторинга сообщений в Telegram по ключевым словам</h2>
+        <p>
+          Обычный мониторинг находит совпадения по слову. KLYXON дополнительно анализирует
+          смысл сообщения и помогает отсеивать нерелевантный шум.
+        </p>
+      </div>
+
+      <div class="semantic-monitoring-compare">
+        <article class="semantic-monitoring-card">
+          <h3>Обычный мониторинг</h3>
+          <p>Показывает все совпадения с ключевым словом — даже случайные упоминания, обсуждения и новости.</p>
+        </article>
+
+        <article class="semantic-monitoring-card semantic-monitoring-card-accent">
+          <h3>KLYXON</h3>
+          <p>Проверяет контекст и оставляет сообщения, в которых есть реальный запрос, потребность или намерение заказать.</p>
+        </article>
+
+        <p class="semantic-monitoring-result">Меньше шума → меньше лишних уведомлений → быстрее реакция</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .semantic-monitoring {
+    padding: 8px 0 56px;
+    background: var(--paper);
+  }
+
+  .semantic-monitoring-shell {
+    display: grid;
+    grid-template-columns: 1.03fr .97fr;
+    gap: 42px;
+    align-items: center;
+    padding: clamp(30px, 4.5vw, 54px);
+    border: 1px solid rgba(112, 198, 173, .48);
+    border-radius: 30px;
+    background:
+      radial-gradient(circle at 86% 16%, rgba(112, 198, 173, .18), transparent 30%),
+      linear-gradient(145deg, #fffdf8, #f0ede5);
+    box-shadow: 0 24px 70px rgba(10, 20, 30, .07);
+  }
+
+  .semantic-monitoring-copy h2 {
+    margin: 8px 0 18px;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: clamp(34px, 4vw, 52px);
+    font-weight: 500;
+    line-height: 1.02;
+  }
+
+  .semantic-monitoring-copy > p:last-child {
+    max-width: 620px;
+    margin: 0;
+    color: var(--muted);
+    font-size: 17px;
+    line-height: 1.7;
+  }
+
+  .semantic-monitoring-compare {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  .semantic-monitoring-card {
+    min-width: 0;
+    padding: 22px;
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    background: rgba(255, 255, 255, .72);
+  }
+
+  .semantic-monitoring-card h3 {
+    margin: 0 0 11px;
+    font-size: 17px;
+    line-height: 1.25;
+  }
+
+  .semantic-monitoring-card p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .semantic-monitoring-card-accent {
+    border-color: rgba(112, 198, 173, .26);
+    background: #0d1b1a;
+    color: #fff;
+  }
+
+  .semantic-monitoring-card-accent h3 {
+    color: var(--green);
+  }
+
+  .semantic-monitoring-card-accent p {
+    color: rgba(255, 255, 255, .72);
+  }
+
+  .semantic-monitoring-result {
+    grid-column: 1 / -1;
+    margin: 0;
+    padding: 15px 18px;
+    border-radius: 16px;
+    background: #e7f2ef;
+    color: #315f55;
+    font-size: 13px;
+    font-weight: 800;
+    text-align: center;
+  }
+
+  @media (max-width: 900px) {
+    .semantic-monitoring-shell {
+      grid-template-columns: 1fr;
+      gap: 28px;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .semantic-monitoring {
+      padding: 4px 0 42px;
+    }
+
+    .semantic-monitoring-shell {
+      gap: 22px;
+      padding: 24px 18px;
+      border-radius: 24px;
+    }
+
+    .semantic-monitoring-copy h2 {
+      font-size: clamp(31px, 10vw, 40px);
+    }
+
+    .semantic-monitoring-copy > p:last-child {
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    .semantic-monitoring-compare {
+      grid-template-columns: 1fr;
+    }
+
+    .semantic-monitoring-result {
+      grid-column: auto;
+    }
+  }
+</style>
