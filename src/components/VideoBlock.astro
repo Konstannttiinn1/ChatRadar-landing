@@ -4,11 +4,12 @@ const { site } = Astro.props;
 <section class="section section-light" id="demo">
   <div class="container video-block">
     <div>
-      <p class="section-kicker">Демо</p>
-      <h2>Как работает KLYXON</h2>
+      <p class="section-kicker">Демонстрация сервиса</p>
+      <h2>Сервис поиска сообщений в Telegram по ключевым словам</h2>
       <p class="muted">
-        В коротком видео показываем подключение Telegram-чата, настройку поиска,
-        проверку сообщений через LLM и получение релевантных уведомлений в Telegram.
+        В видео показываем, как KLYXON отслеживает выбранные Telegram-чаты,
+        находит ключевые сообщения по словам и смыслу, отсекает нерелевантный шум
+        через LLM и отправляет подходящие уведомления в Telegram.
       </p>
       <div class="inline-actions">
         <a class="button button-dark" href={site.botUrl} target="_blank" rel="noreferrer">Открыть бота</a>
@@ -19,7 +20,7 @@ const { site } = Astro.props;
     <div class="video-embed">
       <iframe
         src="https://www.youtube-nocookie.com/embed/3tGm8Ks-m90?rel=0"
-        title="Демонстрация работы KLYXON"
+        title="KLYXON — сервис поиска сообщений в Telegram по ключевым словам"
         loading="lazy"
         referrerpolicy="strict-origin-when-cross-origin"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
